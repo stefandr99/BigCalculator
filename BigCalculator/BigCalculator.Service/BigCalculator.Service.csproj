@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BigCalculator.Core\BigCalculator.Core.csproj" />
+  </ItemGroup>
+
 </Project>

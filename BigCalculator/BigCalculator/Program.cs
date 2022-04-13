@@ -1,4 +1,5 @@
 using BigCalculator.Service;
+using BigCalculator.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ICompute, Compute>();
+builder.Services.AddTransient<Validator>();
 
 var app = builder.Build();
 
