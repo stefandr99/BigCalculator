@@ -18,9 +18,9 @@
         }
 
         [HttpGet("Compute")]
-        public int Compute([FromQuery] int a, [FromQuery] int b)
+        public string Pow([FromQuery] string a, [FromQuery] string b)
         {
-            return compute.ComputeCalculus(a, b);
+            return compute.Pow(a, b);
         }
 
         [HttpGet("Validate")]
