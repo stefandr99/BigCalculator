@@ -1,3 +1,4 @@
+using BigCalculator.Parser;
 using BigCalculator.Service;
 using BigCalculator.Validator;
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ICompute, Compute>();
 builder.Services.AddTransient<Validator>();
+builder.Services.AddTransient<Parser>();
 
 var app = builder.Build();
 
