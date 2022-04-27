@@ -4,6 +4,7 @@
     using Service;
     using Validator;
     using Parser;
+    using BigCalculator.Core;
 
     [ApiController]
     [Route("[controller]")]
@@ -20,10 +21,21 @@
             this.parser = parser;
         }
 
-        [HttpGet("Compute")]
-        public int Compute([FromQuery] int a, [FromQuery] int b)
+        [HttpPost("Compute")]
+        public IActionResult Compute([FromBody] Data data)
         {
-            return compute.ComputeCalculus(a, b);
+            Dictionary<string, string> terms = new Dictionary<string, string>();
+
+            foreach (var term in data.terms)
+            {
+                terms.Add(term.Name, term.Value);
+            }
+
+            var postfixExpression = parser.MakePostfix(data.Expression);
+
+            var result = compute.ComputeCalculus(postfixExpression, terms);
+
+            return Ok(result);
         }
 
         [HttpGet("Validate")]
@@ -36,6 +48,7 @@
         [HttpGet("Parse")]
         public IActionResult Parse([FromQuery] string expression)
         {
+            
             var result = parser.MakePostfix(expression);
 
             return Ok(result);

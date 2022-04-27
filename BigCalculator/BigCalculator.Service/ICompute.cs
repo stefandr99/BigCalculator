@@ -2,10 +2,12 @@
 {
     public interface ICompute
     {
-        int ComputeCalculus(int a, int b);
+        string ComputeCalculus(string expression, Dictionary<string,string> terms);
 
-        int Sum(int a, int b);
+        string Sum(string a, string b);
 
-        int Diff(int a, int b);
+        //string Diff(string a, string b);
+        string Mul(string a, string b);
+
     }
 }
