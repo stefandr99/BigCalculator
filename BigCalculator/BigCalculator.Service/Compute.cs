@@ -26,15 +26,6 @@ namespace BigCalculator.Service
             return false;
         }
 
-        static int toInt(string a)
-        {
-            int i, res = 0;
-            for (i = 0; i < a.Length; i++)
-                res = 10 * res + a[i];
-
-            return res;
-        }
-
         public string Sum(string a, string b)
         {
 			var sum = new StringBuilder();
@@ -130,7 +121,7 @@ namespace BigCalculator.Service
             if (isSmaller(a, b))
                 return "-1";
 
-            String result = "";
+            string result = "";
 
             int len_a = a.Length;
             int len_b = b.Length;
@@ -171,14 +162,14 @@ namespace BigCalculator.Service
             return new string(aa);
         }
 
-        public string Div(string a, int b)  // couldn't make it work to divide by string
+        public string Div(string a, string b)  
         {
-
+            int b_int = 0;
+            b_int = int.Parse(b);
             string res = "";
-
             int idx = 0;
             int temp = (int)(a[idx] - '0');
-            while (temp < b)
+            while (temp < b_int)
             {
                 temp = temp * 10 + (int)(a[idx + 1] - '0');
                 idx++;
@@ -187,12 +178,12 @@ namespace BigCalculator.Service
 
             while (a.Length > idx)
             {
-                res += (char)(temp / b + '0');
+                res += (char)(temp / b_int + '0');
 
-                temp = (temp % b) * 10 + (int)(a[idx] - '0');
+                temp = (temp % b_int) * 10 + (int)(a[idx] - '0');
                 idx++;
             }
-            res += (char)(temp / b + '0');
+            res += (char)(temp / b_int + '0');
 
             if (res.Length == 0)
                 return "-1";
@@ -201,10 +192,10 @@ namespace BigCalculator.Service
 
         }
 
-        public string Pow(string a, string b) // does't work 
+        public string Pow(string a, string b) 
         {
-            int a_int = toInt(a);
-            int b_int = toInt(b);
+            int a_int = int.Parse(a);
+            int b_int = int.Parse(b);
             int[] res = new int[99999999];
             int i=1, k=1, j;
             res[1] = 1;
@@ -229,12 +220,25 @@ namespace BigCalculator.Service
             }
 
             string s = "";
-            for (i = 0; i < res.Length; i++)
+            for (i = k; i >= 1; i--)
                 s += res[i];
 
             return s;
         }
 
-
+        public string Sqrt(string a)
+        {
+            int a_int = int.Parse(a);
+            int x = a_int;
+            while (true)
+            {
+                int y = (x + a_int / x) / 2;
+                if (y >= x)
+                {
+                    return x.ToString();
+                }
+                x = y;
+            }
+        }
     }
 }
