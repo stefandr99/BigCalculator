@@ -3,6 +3,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Service;
     using Validator;
+    using Parser;
+    using BigCalculator.Core;
+    using System.Xml.Linq;
 
     [ApiController]
     [Route("[controller]")]
@@ -10,22 +13,30 @@
     {
         private readonly ICompute compute;
         private readonly Validator validator;
+        private readonly Parser parser;
 
-        public ComputeController(ICompute compute, Validator validator)
+        public ComputeController(ICompute compute, Validator validator, Parser parser)
         {
             this.compute = compute;
             this.validator = validator;
+            this.parser = parser;
         }
 
-        [HttpGet("Compute")]
-        //public string Pow([FromQuery] string a, [FromQuery] string b)
-        //{
-        //    return compute.Pow(a, b);
-        //}
-
-        public string Sqrt([FromQuery] string a)
+        [HttpPost("Compute")]
+        public IActionResult Compute([FromBody] Data data)
         {
-            return compute.Sqrt(a);
+            Dictionary<string, string> terms = new Dictionary<string, string>();
+
+            foreach (var term in data.terms)
+            {
+                terms.Add(term.Name, term.Value);
+            }
+
+            var postfixExpression = parser.MakePostfix(data.Expression);
+
+            var result = compute.ComputeCalculus(postfixExpression, terms);
+
+            return Ok(result);
         }
 
         [HttpGet("Validate")]
@@ -33,5 +44,26 @@
         {
             return this.FromResult(validator.Validate(expression));
         }
+
+        //for testing the expression is given as a query string
+        [HttpGet("Parse")]
+        public IActionResult Parse([FromQuery] string expression)
+        {
+
+            var result = parser.MakePostfix(expression);
+
+            return Ok(result);
+        }
+
+        /*[HttpPost("xml")]
+        public IActionResult PostXml([FromBody] XElement myXml)
+        {
+            foreach (var element in myXml.Elements())
+            {
+                Console.WriteLine(element.Name.ToString());
+            }
+            //Console.WriteLine(myXml.ToString());
+            return Ok();
+        }*/
     }
 }
