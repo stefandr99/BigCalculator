@@ -5,6 +5,7 @@
     using Validator;
     using Parser;
     using BigCalculator.Core;
+    using System.Xml.Linq;
 
     [ApiController]
     [Route("[controller]")]
@@ -48,10 +49,21 @@
         [HttpGet("Parse")]
         public IActionResult Parse([FromQuery] string expression)
         {
-            
+
             var result = parser.MakePostfix(expression);
 
             return Ok(result);
         }
+
+        /*[HttpPost("xml")]
+        public IActionResult PostXml([FromBody] XElement myXml)
+        {
+            foreach (var element in myXml.Elements())
+            {
+                Console.WriteLine(element.Name.ToString());
+            }
+            //Console.WriteLine(myXml.ToString());
+            return Ok();
+        }*/
     }
 }
