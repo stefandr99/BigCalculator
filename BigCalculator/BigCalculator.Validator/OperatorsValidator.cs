@@ -43,6 +43,11 @@
                 }
             }
 
+            if (_operators.Contains(expression.ElementAt(expression.Length - 1)))
+            {
+                return new InvalidResult<string>("Wrong format!");
+            }
+
             return new SuccessResult<string>("Success!");
         }
     }

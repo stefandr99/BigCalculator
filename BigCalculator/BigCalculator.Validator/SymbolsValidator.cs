@@ -7,7 +7,7 @@
     {
         public Result<string> Validate(string expression)
         {
-            var pattern = @"^[0-9()+-*/^]+$";
+            var pattern = @"^[0-9()+\-*/^\bsqrt\b]+$";
 
             if (! Regex.IsMatch(expression, pattern))
             {
