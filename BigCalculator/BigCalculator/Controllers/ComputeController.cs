@@ -23,15 +23,43 @@
         //    return compute.Pow(a, b);
         //}
 
-        public string Sqrt([FromQuery] string a)
-        {
-            return compute.Sqrt(a);
-        }
+        // public string Sqrt([FromQuery] string[] a)
+        // {
+        //     return compute.Sqrt(a);
+        // }
 
         [HttpGet("Validate")]
         public IActionResult Validate([FromQuery] string expression)
         {
             return this.FromResult(validator.Validate(expression));
+        }
+
+        //for testing the expression is given as a query string
+        [HttpGet("Parse")]
+        public IActionResult Parse([FromQuery] string expression)
+        {
+
+            var result = parser.MakePostfix(expression);
+
+            return Ok(result);
+        }
+
+        /*[HttpPost("xml")]
+        public IActionResult PostXml([FromBody] XElement myXml)
+        {
+            foreach (var element in myXml.Elements())
+            {
+                Console.WriteLine(element.Name.ToString());
+            }
+            //Console.WriteLine(myXml.ToString());
+            return Ok();
+        }*/
+
+        [HttpPost("Compute")]
+        public IActionResult PostXml([FromBody] string[] a, [FromBody] string[] b)
+        {
+            Console.WriteLine(compute.Sum(a, b));
+            return Ok();
         }
     }
 }

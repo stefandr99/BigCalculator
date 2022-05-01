@@ -4,7 +4,49 @@ namespace BigCalculator.Service
 {
     public class Compute : ICompute
     {
-        public int ComputeCalculus(int a, int b)
+        private readonly List<char> operators = new List<char> { '+', '-', '*', '/' };
+
+         public string ComputeCalculus(string expression, Dictionary<string, string> terms)
+        {
+            char x;
+            string firstOperand, secondOperand, firstOperandValue, secondOperandValue;
+            int counter = 1;
+
+            Stack myStack = new Stack();
+            Queue<char> postfixEpr = new Queue<char>();
+
+            foreach (char c in expression)
+            {
+                postfixEpr.Enqueue(c);
+            }
+
+            while (postfixEpr.Count > 0)
+            {
+                x = postfixEpr.Dequeue();
+
+                if (!operators.Contains(x))
+                {
+                    myStack.Push(x);
+                }
+                else
+                {
+                    secondOperand = myStack.Pop().ToString();
+                    firstOperand = myStack.Pop().ToString();
+
+                    firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
+                    secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
+
+                    string operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
+                    Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
+                    myStack.Push(operationResult);
+                    counter++;
+                }
+            }
+            var finalResult = myStack.Pop().ToString();
+            return finalResult;
+        }
+
+        private string ComputeOperation(string[] firstOperand, string secondOperand, char operatorType)
         {
             return a + b;
         }
@@ -26,8 +68,19 @@ namespace BigCalculator.Service
             return false;
         }
 
-        public string Sum(string a, string b)
+        static string ArrToString(string[] array)
         {
+            
+            return String.Join("", array);
+        }
+        static string[] StringToArr(string str)
+        {
+            return new[] { str };
+        }
+        public string[] Sum(string[] a_arr, string[] b_arr)
+        {
+            string a = ArrToString(a_arr);
+            string b = ArrToString(b_arr);
 			var sum = new StringBuilder();
 
 			int carry = 0;
@@ -59,15 +112,17 @@ namespace BigCalculator.Service
 			if (carry == 1)
 				sum.Insert(0, carry);
 
-			return sum.ToString();
+			return StringToArr(sum.ToString());
 		}
 
-        public string Mul(string a, string b)
+        public string[] Mul(string[] a_arr, string[] b_arr)
         {
+            string a = ArrToString(a_arr);
+            string b = ArrToString(b_arr);
             int len_a = a.Length;
             int len_b = b.Length;
             if (len_a == 0 || len_b == 0)
-                return "0";
+                return "0";   //aici trebuie sa fie aruncata o exceptie
 
             int[] result = new int[len_a + len_b];
 
@@ -106,20 +161,22 @@ namespace BigCalculator.Service
                 i--;
 
             if (i == -1)
-                return "0";
+                return "0";  // aici trebuie sa fie aruncata o exceptie
 
             String s = "";
 
             while (i >= 0)
                 s += (result[i--]);
 
-            return s;
+            return StringToArr(s);
         }
 
-        public string Diff(string a, string b)
+        public string[] Diff(string[] a_arr, string[] b_arr)
         {
+            string a = ArrToString(a_arr);
+            string b = ArrToString(b_arr);
             if (isSmaller(a, b))
-                return "-1";
+                return "-1"; // aici trebuie sa fie aruncata o exceptie
 
             string result = "";
 
@@ -159,11 +216,13 @@ namespace BigCalculator.Service
 
             char[] aa = result.ToCharArray();
             Array.Reverse(aa);
-            return new string(aa);
+            return StringToArr(new string(aa));
         }
 
-        public string Div(string a, string b)  
+        public string[] Div(string[] a_arr, string[] b_arr)  
         {
+            string a = ArrToString(a_arr);
+            string b = ArrToString(b_arr);
             int b_int = 0;
             b_int = int.Parse(b);
             string res = "";
@@ -186,14 +245,16 @@ namespace BigCalculator.Service
             res += (char)(temp / b_int + '0');
 
             if (res.Length == 0)
-                return "-1";
+                return "-1";  // aici trebuie sa fie aruncata o exceptie
 
-            return res;
+            return StringToArr(res);
 
         }
 
-        public string Pow(string a, string b) 
+        public string[] Pow(string[] a_arr, string[] b_arr)  
         {
+            string a = ArrToString(a_arr);
+            string b = ArrToString(b_arr);
             int a_int = int.Parse(a);
             int b_int = int.Parse(b);
             int[] res = new int[99999999];
@@ -223,11 +284,12 @@ namespace BigCalculator.Service
             for (i = k; i >= 1; i--)
                 s += res[i];
 
-            return s;
+            return StringToArr(s);
         }
 
-        public string Sqrt(string a)
+        public string[] Sqrt(string[] a_arr)
         {
+            string a = ArrToString(a_arr);
             int a_int = int.Parse(a);
             int x = a_int;
             while (true)
@@ -235,7 +297,7 @@ namespace BigCalculator.Service
                 int y = (x + a_int / x) / 2;
                 if (y >= x)
                 {
-                    return x.ToString();
+                    return StringToArr(x.ToString());
                 }
                 x = y;
             }
