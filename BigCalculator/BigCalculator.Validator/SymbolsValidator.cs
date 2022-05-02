@@ -7,7 +7,7 @@
     {
         public Result<string> Validate(Data data)
         {
-            var pattern = @"^[a-z()+\-*/^]+$";
+            var pattern = @"^[a-z()+\-*/^#]+$";
 
             if (!Regex.IsMatch(data.Expression, pattern))
             {
