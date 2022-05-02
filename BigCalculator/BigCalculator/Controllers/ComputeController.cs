@@ -6,6 +6,7 @@
     using Parser;
     using BigCalculator.Core;
     using System.Xml.Linq;
+    using Newtonsoft.Json;
 
     [ApiController]
     [Route("")]
@@ -36,7 +37,7 @@
 
             var result = compute.ComputeCalculus(postfixExpression, terms);
 
-            return Ok(result);
+            return Ok(JsonConvert.SerializeObject(result));
         }
 
         [HttpPost("Validate")]

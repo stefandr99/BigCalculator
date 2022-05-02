@@ -6,13 +6,14 @@ namespace BigCalculator.Service
 {
     public class Compute : ICompute
     {
-        private readonly List<char> operators = new List<char> { '+', '-', '*', '/' };
+        private readonly List<char> operators = new List<char> { '+', '-', '*', '/', '^', '#' };
 
-        public string ComputeCalculus(string expression, Dictionary<string, string> terms)
+        public Dictionary<string, string> ComputeCalculus(string expression, Dictionary<string, string> terms)
         {
             char x;
             string firstOperand, secondOperand, firstOperandValue, secondOperandValue;
             int counter = 1;
+            Dictionary<string, string> results = new Dictionary<string, string>();
 
             Stack myStack = new Stack();
             Queue<char> postfixEpr = new Queue<char>();
@@ -39,13 +40,15 @@ namespace BigCalculator.Service
                     secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
 
                     string operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
-                    Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
+                    //Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
+                    results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
                     myStack.Push(operationResult);
                     counter++;
                 }
             }
             var finalResult = myStack.Pop().ToString();
-            return finalResult;
+            results["final result"] = finalResult;
+            return results;
         }
 
         private string ComputeOperation(string firstOperand, string secondOperand, char operatorType)
@@ -92,39 +95,39 @@ namespace BigCalculator.Service
 
         public string Sum(string a, string b)
         {
-			var sum = new StringBuilder();
+            var sum = new StringBuilder();
 
-			int carry = 0;
+            int carry = 0;
 
-			if (a.Length != b.Length)
-			{
-				var maxLength = Math.Max(a.Length, b.Length);
-				a = a.PadLeft(maxLength, '0');
-				b = b.PadLeft(maxLength, '0');
-			}
+            if (a.Length != b.Length)
+            {
+                var maxLength = Math.Max(a.Length, b.Length);
+                a = a.PadLeft(maxLength, '0');
+                b = b.PadLeft(maxLength, '0');
+            }
 
-			for (int i = a.Length - 1; i >= 0; i--)
-			{
-				var digitSum = (a[i] - '0') + (b[i] - '0') + carry;
+            for (int i = a.Length - 1; i >= 0; i--)
+            {
+                var digitSum = (a[i] - '0') + (b[i] - '0') + carry;
 
-				if (digitSum > 9)
-				{
-					carry = 1;
-					digitSum -= 10;
-				}
-				else
-				{
-					carry = 0;
-				}
+                if (digitSum > 9)
+                {
+                    carry = 1;
+                    digitSum -= 10;
+                }
+                else
+                {
+                    carry = 0;
+                }
 
-				sum.Insert(0, digitSum);
-			}
+                sum.Insert(0, digitSum);
+            }
 
-			if (carry == 1)
-				sum.Insert(0, carry);
+            if (carry == 1)
+                sum.Insert(0, carry);
 
-			return sum.ToString();
-		}
+            return sum.ToString();
+        }
 
         public string Mul(string a, string b)
         {
@@ -145,7 +148,7 @@ namespace BigCalculator.Service
                 int n1 = a[i] - '0';
 
                 last_b = 0;
-          
+
                 for (int j = len_b - 1; j >= 0; j--)
                 {
                     int n2 = b[j] - '0';
@@ -216,7 +219,7 @@ namespace BigCalculator.Service
                     continue;
                 }
                 int sub = (((int)a[i] - (int)'0') - carry);
-                if (i > 0 || sub > 0) 
+                if (i > 0 || sub > 0)
                     result += sub.ToString();
                 carry = 0;
             }
@@ -226,7 +229,7 @@ namespace BigCalculator.Service
             return new string(aa);
         }
 
-        public string Div(string a, string b)  
+        public string Div(string a, string b)
         {
             int b_int = 0;
             b_int = int.Parse(b);
@@ -256,15 +259,15 @@ namespace BigCalculator.Service
 
         }
 
-        public string Pow(string a, string b) 
+        public string Pow(string a, string b)
         {
             int a_int = int.Parse(a);
             int b_int = int.Parse(b);
             int[] res = new int[99999999];
-            int i=1, k=1, j;
+            int i = 1, k = 1, j;
             res[1] = 1;
 
-            while(i<= b_int)
+            while (i <= b_int)
             {
                 for (j = 1; j <= k; j++)
                     res[j] = res[j] * a_int;
@@ -273,7 +276,7 @@ namespace BigCalculator.Service
                     res[j + 1] = res[j + 1] + res[j] / 10;
                     res[j] = res[j] % 10;
                 }
-                while( res[j] > 9)
+                while (res[j] > 9)
                 {
                     k++;
                     res[k] = res[k] + res[j] / 10;
