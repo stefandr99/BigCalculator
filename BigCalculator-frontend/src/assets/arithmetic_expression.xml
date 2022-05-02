@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data>
+    <expression>
+        <operand>a</operand>
+        <operator>+</operator>
+        <operand>b</operand>
+        <operator>*</operator>
+        <parenthesis>
+            <operand>c</operand>
+            <operator>+</operator>
+            <operand>d</operand>
+        </parenthesis>
+        <operator>+</operator>
+        <operand>e</operand>
+    </expression>
+
+    <values>
+        <operand>
+            <name>a</name>
+            <value>100</value>
+        </operand>
+        <operand>
+            <name>b</name>
+            <value>101</value>
+        </operand>
+        <operand>
+            <name>c</name>
+            <value>102</value>
+        </operand>
+        <operand>
+            <name>d</name>
+            <value>103</value>
+        </operand>
+        <operand>
+            <name>e</name>
+            <value>104</value>
+        </operand>
+    </values>
+</data>
