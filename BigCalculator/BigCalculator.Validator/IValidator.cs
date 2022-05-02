@@ -4,6 +4,6 @@
 
     internal interface IValidator
     {
-        Result<string> Validate(string expression);
+        Result<string> Validate(Data data);
     }
 }

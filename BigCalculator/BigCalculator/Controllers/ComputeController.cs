@@ -8,7 +8,7 @@
     using System.Xml.Linq;
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("")]
     public class ComputeController : Controller
     {
         private readonly ICompute compute;
@@ -39,10 +39,10 @@
             return Ok(result);
         }
 
-        [HttpGet("Validate")]
-        public IActionResult Validate([FromQuery] string expression)
+        [HttpPost("Validate")]
+        public IActionResult Validate([FromBody] Data data)
         {
-            return this.FromResult(validator.Validate(expression));
+            return this.FromResult(validator.Validate(data));
         }
 
         //for testing the expression is given as a query string

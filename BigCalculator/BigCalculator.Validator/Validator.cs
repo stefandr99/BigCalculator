@@ -4,7 +4,7 @@
 
     public class Validator
     {
-        public Result<string> Validate(string expression)
+        public Result<string> Validate(Data data)
         {
             var iValidator = typeof(IValidator);
 
@@ -21,7 +21,7 @@
 
             foreach(var validator in validators)
             {
-                var result = validator.Validate(expression);
+                var result = validator.Validate(data);
 
                 if (result.ResultType == ResultType.Invalid)
                 {

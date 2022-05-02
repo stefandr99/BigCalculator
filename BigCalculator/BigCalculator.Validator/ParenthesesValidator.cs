@@ -4,11 +4,11 @@
 
     internal class ParenthesesValidator : IValidator
     {
-        public Result<string> Validate(string expression)
+        public Result<string> Validate(Data data)
         {
             int opened = 0;
 
-            foreach (var c in expression)
+            foreach (var c in data.Expression)
             {
                 if (c == '(')
                     opened++;
