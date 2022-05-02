@@ -4,7 +4,7 @@
     using Service;
     using Validator;
     using Parser;
-    using BigCalculator.Core;
+    using Core;
     using System.Xml.Linq;
     using Newtonsoft.Json;
 
@@ -15,23 +15,20 @@
         private readonly ICompute compute;
         private readonly Validator validator;
         private readonly Parser parser;
+        private readonly Convertor convertor;
 
-        public ComputeController(ICompute compute, Validator validator, Parser parser)
+        public ComputeController(ICompute compute, Validator validator, Parser parser, Convertor convertor)
         {
             this.compute = compute;
             this.validator = validator;
             this.parser = parser;
+            this.convertor = convertor;
         }
 
         [HttpPost("Compute")]
         public IActionResult Compute([FromBody] Data data)
         {
-            Dictionary<string, string> terms = new Dictionary<string, string>();
-
-            foreach (var term in data.terms)
-            {
-                terms.Add(term.Name, term.Value);
-            }
+            var terms = data.FromDataTermsToDictionary();
 
             var postfixExpression = parser.MakePostfix(data.Expression);
 
@@ -56,15 +53,18 @@
             return Ok(result);
         }
 
-        /*[HttpPost("xml")]
-        public IActionResult PostXml([FromBody] XElement myXml)
+        [HttpPost("ComputeXml")]
+        public IActionResult PostXml([FromBody] XElement xml)
         {
-            foreach (var element in myXml.Elements())
-            {
-                Console.WriteLine(element.Name.ToString());
-            }
-            //Console.WriteLine(myXml.ToString());
-            return Ok();
-        }*/
+            var data = convertor.XmlToData(xml);
+
+            var terms = data.FromDataTermsToDictionary();
+
+            var postfixExpression = parser.MakePostfix(data.Expression);
+
+            var result = compute.ComputeCalculus(postfixExpression, terms);
+
+            return Ok(JsonConvert.SerializeObject(result));
+        }
     }
 }

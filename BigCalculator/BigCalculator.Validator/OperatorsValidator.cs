@@ -5,7 +5,7 @@ using System.Linq;
 
     public class OperatorsValidator : IValidator
     {
-        private readonly List<char> _operators = new List<char> { '+', '-', '*', '/', '^' };
+        private readonly List<char> _operators = new() { '+', '-', '*', '/', '^' };
 
         public Result<string> Validate(Data data)
         {
@@ -27,9 +27,18 @@ using System.Linq;
                     }
                 }
 
+                if (data.Expression.ElementAt(i) == '#')
+                {
+                    if ((i > 0 && !_operators.Contains(data.Expression.ElementAt(i - 1))) ||
+                        data.Expression.ElementAt(i + 1) != '(')
+                    {
+                        return new InvalidResult<string>("Wrong format!");
+                    }
+                }
+
                 if (data.Expression.ElementAt(i) == '(')
                 {
-                    if (!_operators.Contains(data.Expression.ElementAt(i - 1)) ||
+                    if ((!_operators.Contains(data.Expression.ElementAt(i - 1)) && data.Expression.ElementAt(i - 1) != '#') ||
                         _operators.Contains(data.Expression.ElementAt(i + 1)))
                     {
                         return new InvalidResult<string>("Wrong format!");
@@ -38,7 +47,7 @@ using System.Linq;
 
                 if (data.Expression.ElementAt(i) == ')')
                 {
-                    if (!_operators.Contains(data.Expression.ElementAt(i + 1)) ||
+                    if (Char.IsLetter(data.Expression.ElementAt(i + 1)) || data.Expression.ElementAt(i + 1) == '#' ||
                         _operators.Contains(data.Expression.ElementAt(i - 1)))
                     {
                         return new InvalidResult<string>("Wrong format!");

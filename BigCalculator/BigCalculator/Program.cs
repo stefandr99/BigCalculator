@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ICompute, Compute>();
 builder.Services.AddTransient<Validator>();
 builder.Services.AddTransient<Parser>();
+builder.Services.AddTransient<Convertor>();
 
 var app = builder.Build();
 

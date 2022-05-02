@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Text;
 
 
@@ -76,7 +77,7 @@ namespace BigCalculator.Service
                     result = Mul(firstOperand, secondOperand);
                     break;
                 case '/':
-                    result = Div(firstOperand, secondOperand);
+                    //result = Div(firstOperand, secondOperand);
                     break;
                 case '-':
                     result = Diff(firstOperand, secondOperand);
@@ -88,7 +89,7 @@ namespace BigCalculator.Service
             return result;
         }
 
-        static bool isSmaller(string str1, string str2)
+        private static bool IsSmaller(string str1, string str2)
         {
             int n1 = str1.Length, n2 = str2.Length;
             if (n1 < n2)
@@ -197,7 +198,7 @@ namespace BigCalculator.Service
 
         public string Diff(string a, string b)
         {
-            if (isSmaller(a, b))
+            if (IsSmaller(a, b))
                 return "-1";
 
             string result = "";
@@ -241,16 +242,16 @@ namespace BigCalculator.Service
             return new string(aa);
         }
 
-        public string Div(string a, string b)
+        public string Div(int[] a, int[] b)
         {
             int b_int = 0;
-            b_int = int.Parse(b);
+            b_int = b.Aggregate((result, x) => result * 10 + x); ;
             string res = "";
             int idx = 0;
-            int temp = (int)(a[idx] - '0');
+            int temp = a[idx];
             while (temp < b_int)
             {
-                temp = temp * 10 + (int)(a[idx + 1] - '0');
+                temp = temp * 10 + a[idx + 1];
                 idx++;
             }
             ++idx;
@@ -259,7 +260,7 @@ namespace BigCalculator.Service
             {
                 res += (char)(temp / b_int + '0');
 
-                temp = (temp % b_int) * 10 + (int)(a[idx] - '0');
+                temp = (temp % b_int) * 10 + a[idx];
                 idx++;
             }
             res += (char)(temp / b_int + '0');
@@ -268,7 +269,6 @@ namespace BigCalculator.Service
                 return "-1";
 
             return res;
-
         }
 
         public string Pow(string a, string b)

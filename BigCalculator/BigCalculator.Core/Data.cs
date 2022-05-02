@@ -1,9 +1,12 @@
-﻿namespace BigCalculator.Core
+﻿using System.Xml.Serialization;
+
+namespace BigCalculator.Core
 {
+    [Serializable, XmlRoot("data")]
     public class Data
     {
         public string Expression { get; set; }
-
-        public IEnumerable<Term> terms { get; set; }
+        
+        public IEnumerable<Term> Terms { get; set; }
     }
 }
