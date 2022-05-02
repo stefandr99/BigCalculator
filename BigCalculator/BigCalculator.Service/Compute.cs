@@ -60,6 +60,15 @@ namespace BigCalculator.Service
                 case '*':
                     result = Mul(firstOperand, secondOperand);
                     break;
+                case '/':
+                    result = Div(firstOperand, secondOperand);
+                    break;
+                case '-':
+                    result = Diff(firstOperand, secondOperand);
+                    break;
+                case '^':
+                    result = Pow(firstOperand, secondOperand);
+                    break;
             }
             return result;
         }
