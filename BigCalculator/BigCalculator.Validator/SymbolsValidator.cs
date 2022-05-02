@@ -5,11 +5,11 @@
 
     internal class SymbolsValidator : IValidator
     {
-        public Result<string> Validate(string expression)
+        public Result<string> Validate(Data data)
         {
-            var pattern = @"^[0-9()+\-*/^\bsqrt\b]+$";
+            var pattern = @"^[a-z()+\-*/^]+$";
 
-            if (! Regex.IsMatch(expression, pattern))
+            if (!Regex.IsMatch(data.Expression, pattern))
             {
                 return new InvalidResult<string>("Invalid symbols!");
             }

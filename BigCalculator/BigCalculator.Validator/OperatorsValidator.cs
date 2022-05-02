@@ -1,49 +1,52 @@
 ﻿namespace BigCalculator.Validator
 {
     using Core;
+using System.Linq;
 
     public class OperatorsValidator : IValidator
     {
-        private List<char> _operators = new List<char> { '+', '-', '*', '/', '^' };
+        private readonly List<char> _operators = new List<char> { '+', '-', '*', '/', '^' };
 
-        public Result<string> Validate(string expression)
+        public Result<string> Validate(Data data)
         {
-            if (_operators.Contains(expression.ElementAt(0)))
+            var terms = data.ToListTerms();
+
+            if (_operators.Contains(data.Expression.ElementAt(0)))
             {
                 return new InvalidResult<string>("Wrong format!");
             }
 
-            for (var i = 1; i < expression.Length - 1; i++)
+            for (var i = 1; i < data.Expression.Length - 1; i++)
             {
-                if (_operators.Contains(expression.ElementAt(i)))
+                if (_operators.Contains(data.Expression.ElementAt(i)))
                 {
-                    if (_operators.Contains(expression.ElementAt(i - 1)) ||
-                        _operators.Contains(expression.ElementAt(i + 1)))
+                    if (_operators.Contains(data.Expression.ElementAt(i - 1)) ||
+                        _operators.Contains(data.Expression.ElementAt(i + 1)))
                     {
                         return new InvalidResult<string>("Wrong format!");
                     }
                 }
 
-                if (expression.ElementAt(i) == '(')
+                if (data.Expression.ElementAt(i) == '(')
                 {
-                    if (!_operators.Contains(expression.ElementAt(i - 1)) ||
-                        !Char.IsDigit(expression.ElementAt(i + 1)))
+                    if (!_operators.Contains(data.Expression.ElementAt(i - 1)) ||
+                        _operators.Contains(data.Expression.ElementAt(i + 1)))
                     {
                         return new InvalidResult<string>("Wrong format!");
                     }
                 }
 
-                if (expression.ElementAt(i) == ')')
+                if (data.Expression.ElementAt(i) == ')')
                 {
-                    if (!_operators.Contains(expression.ElementAt(i + 1)) ||
-                        !Char.IsDigit(expression.ElementAt(i - 1)))
+                    if (!_operators.Contains(data.Expression.ElementAt(i + 1)) ||
+                        _operators.Contains(data.Expression.ElementAt(i - 1)))
                     {
                         return new InvalidResult<string>("Wrong format!");
                     }
                 }
             }
 
-            if (_operators.Contains(expression.ElementAt(expression.Length - 1)))
+            if (_operators.Contains(data.Expression.ElementAt(data.Expression.Length - 1)))
             {
                 return new InvalidResult<string>("Wrong format!");
             }
