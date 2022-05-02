@@ -29,7 +29,7 @@ using System.Linq;
 
                 if (data.Expression.ElementAt(i) == '#')
                 {
-                    if ((i > 0 && !_operators.Contains(data.Expression.ElementAt(i - 1))) ||
+                    if ((i > 0 && (!_operators.Contains(data.Expression.ElementAt(i - 1)) && data.Expression.ElementAt(i - 1) != '(')) ||
                         data.Expression.ElementAt(i + 1) != '(')
                     {
                         return new InvalidResult<string>("Wrong format!");
