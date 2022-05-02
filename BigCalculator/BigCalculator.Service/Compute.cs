@@ -11,7 +11,7 @@ namespace BigCalculator.Service
         public Dictionary<string, string> ComputeCalculus(string expression, Dictionary<string, string> terms)
         {
             char x;
-            string firstOperand, secondOperand, firstOperandValue, secondOperandValue;
+            string firstOperand, secondOperand, firstOperandValue, secondOperandValue, operationResult;
             int counter = 1;
             Dictionary<string, string> results = new Dictionary<string, string>();
 
@@ -33,15 +33,27 @@ namespace BigCalculator.Service
                 }
                 else
                 {
-                    secondOperand = myStack.Pop().ToString();
-                    firstOperand = myStack.Pop().ToString();
+                    if(x.Equals('#'))
+                    {
+                        firstOperand = myStack.Pop().ToString();
 
-                    firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
-                    secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
+                        firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
 
-                    string operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
-                    //Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
-                    results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
+                        operationResult = Sqrt(firstOperandValue);
+                        results["operation " + counter] = "sqrt(" + firstOperand + ") =" + operationResult; 
+                    }
+                    else
+                    {
+                        secondOperand = myStack.Pop().ToString();
+                        firstOperand = myStack.Pop().ToString();
+
+                        firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
+                        secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
+
+                        operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
+                        //Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
+                        results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
+                    }
                     myStack.Push(operationResult);
                     counter++;
                 }
