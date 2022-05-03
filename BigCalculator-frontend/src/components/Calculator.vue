@@ -7,7 +7,7 @@
           @click="advanced = true"
           v-if="JSON.stringify(result) !== JSON.stringify({})"
         >
-          View operations
+          <button class="advanced">View operations</button>
         </div>
         <div class="bc__body__display__value">
           {{ charRow.join("").length === 0 ? "0" : charRow.join("") }}
@@ -66,7 +66,7 @@ export default {
       charRow: [],
       parenthesesCount: 0,
       numbers: ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "del"],
-      operations: ["+", "-", "*", "/", "(", ")", "^", "√"],
+      operations: ["+", "-", "*", "/", "(", ")", "^"],
       basicKeys: {},
       result: {},
       data: { expression: "", terms: [] },
@@ -94,7 +94,6 @@ export default {
       }
     },
     addOperation(text) {
-      console.log(this.charRow[this.charRow.length - 1]);
       if (text == "(") {
         if (this.charRow.length == 0) {
           this.charRow.push(...[" ", text, " "]);
@@ -177,25 +176,23 @@ export default {
           .post("http://localhost:5187/Validate", this.data)
           .then((response) => {
             console.log(response.data);
+            axios
+              .post("http://localhost:5187/Compute", this.data)
+              .then((response) => {
+                console.log(response.data);
+                this.charRow = [response.data["final result"]];
+                this.result = response.data;
+              })
+              .catch((response) => {
+                Report.failure(
+                  "Error",
+                  "" + response.response.data[0],
+                  "Try again"
+                );
+              });
           })
           .catch((response) => {
             console.log(response.response.data[0]);
-            Block.remove(".bc-expression__field");
-            Report.failure(
-              "Error",
-              "" + response.response.data[0],
-              "Try again"
-            );
-          });
-
-        axios
-          .post("http://localhost:5187/Compute", this.data)
-          .then((response) => {
-            console.log(response.data);
-            this.charRow = [response.data["final result"]];
-            this.result = response.data;
-          })
-          .catch((response) => {
             Report.failure(
               "Error",
               "" + response.response.data[0],
@@ -208,15 +205,56 @@ export default {
       this.charRow.pop();
     },
   },
+  mounted() {
+    window.addEventListener("keydown", (e) => {
+      if (this.$route.name === "basic") {
+        if (this.numbers.includes(e.key) && e.key !== "del") {
+          this.addCharacter(e.key);
+        }
+        if (this.operations.includes(e.key)) {
+          this.addOperation(e.key);
+        }
+      }
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", (e) => {
+      if (this.$route.name === "basic") {
+        if (this.numbers.includes(e.key) && e.key !== "del") {
+          this.addCharacter(e.key);
+        }
+        if (this.operations.includes(e.key)) {
+          this.addOperation(e.key);
+        }
+      }
+    });
+  },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @font-face {
   font-family: "HongKong";
   src: local("HongKong"),
     url("../assets/HongKong-Medium.otf") format("opentype");
 }
+
+.advanced {
+  cursor: pointer;
+  font-family: "HongKong";
+  text-decoration: none;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  color: #d4d4d2;
+  transition: 0.2s all ease-in-out;
+  padding: 14px 20px;
+  background-color: #505050;
+  &:hover {
+    color: #ff9500;
+  }
+}
+
 .bc {
   &__body {
     display: flex;

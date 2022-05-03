@@ -1,6 +1,9 @@
 <template>
   <div class="bc-expression">
-    <h3>Expression Calculator</h3>
+    <div class="es-page-header">
+      <router-link class="nav" to="/"><button>home</button></router-link>
+      <h3>Expression Calculator</h3>
+    </div>
     <h6 v-if="step === 1">enter an expression</h6>
     <h6 v-if="step === 2">enter the values of the variables</h6>
     <Expression :data="data" v-if="step === 1" />
@@ -19,6 +22,17 @@
     <div v-if="step === 2" class="bc-expression__buttons">
       <button @click="prevStep">back</button>
       <button @click="nextStep()">finish</button>
+    </div>
+    <div v-if="step === 1">
+      <div class="es-result-pairs" v-if="legend">
+        <div
+          class="es-result-pair"
+          v-for="(item, key, index) in legend"
+          :key="index"
+        >
+          {{ key }} : {{ item }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +62,16 @@ export default {
       },
       keys: {},
       result: {},
+      legend: {
+        "+": "addition",
+        "-": "subtraction",
+        "*": "multiplication",
+        "/": "division",
+        "^": "power",
+        "#": "square root",
+        "(": "left parenthesis",
+        ")": "right parenthesis",
+      },
     };
   },
   methods: {
@@ -131,6 +155,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.es-page-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .nav {
+    margin-right: 40px;
+    button {
+      cursor: pointer;
+      font-family: "HongKong";
+      text-decoration: none;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      color: #d4d4d2;
+      transition: 0.2s all ease-in-out;
+      padding: 14px 20px;
+      background-color: #505050;
+      &:hover {
+        color: #ff9500;
+      }
+    }
+  }
+}
 h3 {
   margin-bottom: 24px;
   color: #ff9500;
@@ -165,5 +212,22 @@ h6 {
       }
     }
   }
+}
+.es-result-pairs {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+  flex-wrap: wrap;
+}
+.es-result-pair {
+  padding: 18px;
+
+  margin: 8px;
+  background: #505050;
+  color: #d4d4d2;
+  border-radius: 8px;
 }
 </style>

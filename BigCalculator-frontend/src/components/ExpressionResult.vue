@@ -1,8 +1,10 @@
 <template>
   <div class="es-result">
-    <div class="es-result-operation-description">{{ expression }}</div>
-    <hr />
-    <div class="es-result-pairs">
+    <div class="es-result-operation-description" v-if="expression">
+      {{ expression }}
+    </div>
+    <hr v-if="expression" />
+    <div class="es-result-pairs" v-if="keys">
       <div
         class="es-result-pair"
         v-for="(item, key, index) in keys"
@@ -11,7 +13,7 @@
         {{ key }} = {{ keys[key] }}
       </div>
     </div>
-    <hr />
+    <hr v-if="keys" />
     <div class="es-result-operations">
       <div v-for="(item, key, index) in result" :key="index">
         <div
