@@ -9,7 +9,7 @@
         string Diff(int[] a, int[] b);
         string Div(int[] a, int[] b);
         string Pow(int[] a, int[] b);
-        string Sqrt(string a);
+        string Sqrt(int[] a);
 
     }
 }

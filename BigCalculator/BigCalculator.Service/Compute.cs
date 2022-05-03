@@ -40,7 +40,7 @@ namespace BigCalculator.Service
 
                         firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
 
-                        operationResult = Sqrt(firstOperandValue);
+                        operationResult = Sqrt(ConvertStringToIntArray(firstOperandValue));
                         results["operation " + counter] = "sqrt(" + firstOperand + ") =" + operationResult;
                     }
                     else
@@ -126,6 +126,9 @@ namespace BigCalculator.Service
 
         public string Sum(int[] a, int[] b)
         {
+            Array.Reverse(a);
+            Array.Reverse(b);
+
             int[] result = new int[a.Length + b.Length];
 
             int maxLength = Math.Max(a.Length, b.Length);
@@ -142,13 +145,16 @@ namespace BigCalculator.Service
                 result[i + 1] = result[i + 1] + carry;
             }
 
+            int j = result.Length - 1;
+            while (j >= 0 && result[j] == 0)
+                j--;
+
+            if (j == -1)
+                return "0";
             String s = "";
 
-            for (int j = result.Length - 1; j >= 0; j--)
-            {
-                if (result[j] != 0)
-                    s += (result[j]);
-            }
+            while (j >= 0)
+                s += (result[j--]);
 
             return s;
         }
@@ -247,7 +253,7 @@ namespace BigCalculator.Service
 
             char[] aa = result.ToCharArray();
             Array.Reverse(aa);
-            return new string(aa);
+            return new string(aa).TrimStart('0');
         }
 
         public string Div(int[] a, int[] b)
@@ -322,19 +328,16 @@ namespace BigCalculator.Service
             return s;
         }
 
-        public string Sqrt(string a)
+        public string Sqrt(int[] a)
         {
-            int a_int = int.Parse(a);
-            int x = a_int;
-            while (true)
+            int[] res = new int[] { 0 };
+            int[] one = new int[] { 1 };
+            while (IsSmaller(ConvertStringToIntArray(Mul(res, res)), a))
             {
-                int y = (x + a_int / x) / 2;
-                if (y >= x)
-                {
-                    return x.ToString();
-                }
-                x = y;
+                string result = Sum(res, one);
+                res = ConvertStringToIntArray(result);
             }
+            return Diff(res, one);
         }
 
     }
