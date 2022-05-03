@@ -39,7 +39,7 @@ namespace BigCalculator.Service
 
                         firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
 
-                        operationResult = Sqrt(firstOperandValue);
+                        operationResult = Sqrt(ConvertStringToIntArray(firstOperandValue));
                         results["operation " + counter] = "sqrt(" + firstOperand + ") =" + operationResult;
                     }
                     else
@@ -51,6 +51,11 @@ namespace BigCalculator.Service
                         secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
 
                         operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
+                        if (operationResult.Equals("-1"))
+                        {
+                            results["error"] = "Negative result of subsctraction: " + firstOperand + " " + x + " " + secondOperand;
+                            return results;
+                        }
                         //Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
                         results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
                     }
@@ -67,39 +72,42 @@ namespace BigCalculator.Service
         {
             string result = "0";
 
+            int[] operand1 = ConvertStringToIntArray(firstOperand);
+            int[] operand2 = ConvertStringToIntArray(secondOperand);
+
             switch (operatorType)
             {
                 case '+':
-                    result = Sum(firstOperand, secondOperand);
+                    result = Sum(operand1, operand2);
                     break;
                 case '*':
-                    //result = Mul(firstOperand, secondOperand);
+                    result = Mul(operand1, operand2);
                     break;
                 case '/':
-                    //result = Div(firstOperand, secondOperand);
+                    result = Div(operand1, operand2);
                     break;
                 case '-':
-                    result = Diff(firstOperand, secondOperand);
+                    result = Diff(operand1, operand2);
                     break;
                 case '^':
-                    result = Pow(firstOperand, secondOperand);
+                    result = Pow(operand1, operand2);
                     break;
             }
             return result;
         }
 
-        private static bool IsSmaller(string str1, string str2)
+        private static bool IsSmaller(int[] a, int[] b)
         {
-            int n1 = str1.Length, n2 = str2.Length;
+            int n1 = a.Length, n2 = b.Length;
             if (n1 < n2)
                 return true;
             if (n2 < n1)
                 return false;
 
             for (int i = 0; i < n1; i++)
-                if (str1[i] < str2[i])
+                if (a[i] < b[i])
                     return true;
-                else if (str1[i] > str2[i])
+                else if (a[i] > b[i])
                     return false;
 
             return false;
@@ -138,38 +146,52 @@ namespace BigCalculator.Service
 
         public string Sum(string a, string b)
         {
-            var sum = new StringBuilder();
+            int[] result = Array.ConvertAll(x.ToCharArray(), c => (int)Char.GetNumericValue(c));
 
-            int carry = 0;
+            return result;
+        }
 
-            if (a.Length != b.Length)
+        private static int[] ConvertIntToIntArray(int number)
+        {
+            //int[] result = Array.ConvertAll(number.ToString().ToArray(), x => (int)x);
+            int[] result = number.ToString().Select(c => (int)Char.GetNumericValue(c)).ToArray();
+
+            return result;
+        }
+
+        public string Sum(int[] a, int[] b)
+        {
+            Array.Reverse(a);
+            Array.Reverse(b);
+
+            int[] result = new int[a.Length + b.Length];
+
+            int maxLength = Math.Max(a.Length, b.Length);
+
+            for (int i = 0; i < maxLength; i++)
             {
-                var maxLength = Math.Max(a.Length, b.Length);
-                a = a.PadLeft(maxLength, '0');
-                b = b.PadLeft(maxLength, '0');
+                int lhs = (i < a.Length) ? a[i] : 0;
+                int rhs = (i < b.Length) ? b[i] : 0;
+
+                int sum = result[i] + lhs + rhs;
+                result[i] = sum % 10;
+
+                int carry = sum / 10;
+                result[i + 1] = result[i + 1] + carry;
             }
 
-            for (int i = a.Length - 1; i >= 0; i--)
-            {
-                var digitSum = (a[i] - '0') + (b[i] - '0') + carry;
+            int j = result.Length - 1;
+            while (j >= 0 && result[j] == 0)
+                j--;
 
-                if (digitSum > 9)
-                {
-                    carry = 1;
-                    digitSum -= 10;
-                }
-                else
-                {
-                    carry = 0;
-                }
+            if (j == -1)
+                return "0";
+            String s = "";
 
-                sum.Insert(0, digitSum);
-            }
+            while (j >= 0)
+                s += (result[j--]);
 
-            if (carry == 1)
-                sum.Insert(0, carry);
-
-            return sum.ToString();
+            return s;
         }
 
         public string Mul(int[] a, int[] b)
@@ -224,7 +246,7 @@ namespace BigCalculator.Service
             return s;
         }
 
-        public string Diff(string a, string b)
+        public string Diff(int[] a, int[] b)
         {
             if (IsSmaller(a, b))
                 return "-1";
@@ -239,8 +261,7 @@ namespace BigCalculator.Service
 
             for (int i = len_b - 1; i >= 0; i--)
             {
-                int sub = (((int)a[i + diff] - (int)'0')
-                           - ((int)b[i] - (int)'0') - carry);
+                int sub = a[i + diff] - b[i] - carry;
                 if (sub < 0)
                 {
                     sub = sub + 10;
@@ -259,7 +280,7 @@ namespace BigCalculator.Service
                     result += "9";
                     continue;
                 }
-                int sub = (((int)a[i] - (int)'0') - carry);
+                int sub = (int)a[i] - carry;
                 if (i > 0 || sub > 0)
                     result += sub.ToString();
                 carry = 0;
@@ -453,53 +474,59 @@ namespace BigCalculator.Service
             return res;
         }
 
-        public string Pow(string a, string b)
+        public string Pow(int[] a, int[] b)
         {
-            int a_int = int.Parse(a);
-            int b_int = int.Parse(b);
             int[] res = new int[99999999];
-            int i = 1, k = 1, j;
+            int[] i = new int[b.Length];
+            int j, k = 1;
+
             res[1] = 1;
 
-            while (i <= b_int)
+            while (IsSmaller(i, b))
             {
                 for (j = 1; j <= k; j++)
-                    res[j] = res[j] * a_int;
+                {
+                    var operand = ConvertStringToIntArray(res[j].ToString());
+                    var operationResult = Mul(operand, a);
+                    res[j] = Int32.Parse(operationResult);
+                }
                 for (j = 1; j < k; j++)
                 {
-                    res[j + 1] = res[j + 1] + res[j] / 10;
+                    var operand1 = ConvertStringToIntArray(res[j + 1].ToString());
+                    var operand2 = ConvertIntToIntArray(res[j] / 10);
+                    var operationResult = Sum(operand1, operand2);
+                    res[j + 1] = Int32.Parse(operationResult);
                     res[j] = res[j] % 10;
                 }
                 while (res[j] > 9)
                 {
                     k++;
-                    res[k] = res[k] + res[j] / 10;
+                    var operand1 = ConvertIntToIntArray(res[k]);
+                    var operand2 = ConvertIntToIntArray(res[j] / 10);
+                    var operationResult = Sum(operand1, operand2);
+                    res[k] = Int32.Parse(operationResult);
                     res[k - 1] = res[k - 1] % 10;
                     j++;
                 }
-                i++;
+                i = ConvertStringToIntArray(Sum(i, new int[] { 1 }));
             }
-
             string s = "";
-            for (i = k; i >= 1; i--)
-                s += res[i];
+            for (j = k; j >= 1; j--)
+                s += res[j];
 
             return s;
         }
 
-        public string Sqrt(string a)
+        public string Sqrt(int[] a)
         {
-            int a_int = int.Parse(a);
-            int x = a_int;
-            while (true)
+            int[] res = new int[] { 0 };
+            int[] one = new int[] { 1 };
+            while (IsSmaller(ConvertStringToIntArray(Mul(res, res)), a))
             {
-                int y = (x + a_int / x) / 2;
-                if (y >= x)
-                {
-                    return x.ToString();
-                }
-                x = y;
+                string result = Sum(res, one);
+                res = ConvertStringToIntArray(result);
             }
+            return Diff(res, one);
         }
 
     }

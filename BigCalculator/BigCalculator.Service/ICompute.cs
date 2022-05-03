@@ -4,12 +4,12 @@
     {
         Dictionary<string, string> ComputeCalculus(string expression, Dictionary<string, string> terms);
 
-        string Sum(string a, string b);
+        string Sum(int[] a, int[] b);
         string Mul(int[] a, int[] b);
-        string Diff(string a, string b);
+        string Diff(int[] a, int[] b);
         string Div(int[] a, int[] b);
-        string Pow(string a, string b);
-        string Sqrt(string a);
+        string Pow(int[] a, int[] b);
+        string Sqrt(int[] a);
 
         List<int> FromDecimalToBinary(int[] a);
         List<int> FromBinaryToDecimal(List<int> a);
