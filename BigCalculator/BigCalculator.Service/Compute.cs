@@ -52,6 +52,11 @@ namespace BigCalculator.Service
                         secondOperandValue = terms.ContainsKey(secondOperand) ? terms[secondOperand] : secondOperand;
 
                         operationResult = ComputeOperation(firstOperandValue, secondOperandValue, x);
+                        if (operationResult.Equals("-1"))
+                        {
+                            results["error"] = "Negative result of subsctraction: " + firstOperand + " " + x + " " + secondOperand;
+                            return results;
+                        }
                         //Console.WriteLine("Operation " + counter + ":" + firstOperand + x + secondOperand + " = " + operationResult);
                         results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
                     }
