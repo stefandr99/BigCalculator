@@ -34,14 +34,14 @@ namespace BigCalculator.Service
                 }
                 else
                 {
-                    if(x.Equals('#'))
+                    if (x.Equals('#'))
                     {
                         firstOperand = myStack.Pop().ToString();
 
                         firstOperandValue = terms.ContainsKey(firstOperand) ? terms[firstOperand] : firstOperand;
 
                         operationResult = Sqrt(firstOperandValue);
-                        results["operation " + counter] = "sqrt(" + firstOperand + ") =" + operationResult; 
+                        results["operation " + counter] = "sqrt(" + firstOperand + ") =" + operationResult;
                     }
                     else
                     {
@@ -74,7 +74,7 @@ namespace BigCalculator.Service
                     result = Sum(firstOperand, secondOperand);
                     break;
                 case '*':
-                    result = Mul(firstOperand, secondOperand);
+                    //result = Mul(firstOperand, secondOperand);
                     break;
                 case '/':
                     //result = Div(firstOperand, secondOperand);
@@ -142,29 +142,27 @@ namespace BigCalculator.Service
             return sum.ToString();
         }
 
-        public string Mul(string a, string b)
+        public string Mul(int[] a, int[] b)
         {
             int len_a = a.Length;
             int len_b = b.Length;
-            if (len_a == 0 || len_b == 0)
+            if (a[0] == 0 || b[0] == 0)
                 return "0";
 
-            int[] result = new int[len_a + len_b];
+            int[] result = new int[a.Length + b.Length];
 
             int last_a = 0;
-            int last_b = 0;
-            int i;
+            int last_b, i;
 
             for (i = len_a - 1; i >= 0; i--)
             {
                 int carry = 0;
-                int n1 = a[i] - '0';
-
+                int n1 = a[i];
                 last_b = 0;
 
                 for (int j = len_b - 1; j >= 0; j--)
                 {
-                    int n2 = b[j] - '0';
+                    int n2 = b[j];
 
                     int sum = n1 * n2 + result[last_a + last_b] + carry;
 

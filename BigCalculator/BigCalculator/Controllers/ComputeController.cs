@@ -66,5 +66,16 @@
 
             return Ok(JsonConvert.SerializeObject(result));
         }
+
+        [HttpGet("Test")]
+        public IActionResult Test()
+        {
+            int[] a = new int[] { 2,1,4,7,4,8,3,6,4,7,1,2 };
+            int[] b = new int[] { 2, 1, 4, 7 };
+
+            string result = compute.Mul(a, b);
+
+            return Ok(result);
+        }
     }
 }
