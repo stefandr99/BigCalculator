@@ -342,6 +342,8 @@ namespace BigCalculator.Service
                 string result = Sum(res, one);
                 res = ConvertStringToIntArray(result);
             }
+            if (Mul(res, res).Equals(string.Join("", a)))
+                return string.Join("", res);
             return Diff(res, one);
         }
 
