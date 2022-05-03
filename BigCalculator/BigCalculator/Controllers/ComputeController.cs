@@ -67,15 +67,27 @@
             return Ok(JsonConvert.SerializeObject(result));
         }
 
-        [HttpGet("Test")]
-        public IActionResult Test()
+        [HttpPost("Test")]
+        public IActionResult Test(int[] a)
         {
-            int[] a = new int[] { 2,1,4,7,4,8,3,6,4,7,1,2 };
-            int[] b = new int[] { 2, 1, 4, 7 };
-
-            string result = compute.Mul(a, b);
+            var result = compute.FromBinaryToDecimal(a.ToList());
 
             return Ok(result);
         }
+
+        [HttpPost("Test2")]
+        public IActionResult Test([FromBody] Num num)
+        {
+            var result = compute.Div2(num.a, num.b);
+
+            return Ok(result);
+        }
+    }
+
+    public class Num
+    {
+        public int[] a { get; set; }
+
+        public int[] b { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Text;
 
-
 namespace BigCalculator.Service
 {
     public class Compute : ICompute
@@ -104,6 +103,37 @@ namespace BigCalculator.Service
                     return false;
 
             return false;
+        }
+
+        private static bool IsSmallerOrEqual(string str1, string str2)
+        {
+            int n1 = str1.Length, n2 = str2.Length;
+            if (n1 < n2)
+                return true;
+            if (n2 < n1)
+                return false;
+
+            for (int i = 0; i < n1; i++)
+                if (str1[i] < str2[i])
+                    return true;
+                else if (str1[i] > str2[i])
+                    return false;
+
+            return true;
+        }
+
+        private static bool AreEqual(string str1, string str2)
+        {
+            int n1 = str1.Length, n2 = str2.Length;
+
+            if (n1 < n2 || n2 < n1)
+                return false;
+
+            for (int i = 0; i < n1; i++)
+                if (str1[i] < str2[i] || str1[i] > str2[i])
+                    return false;
+
+            return true;
         }
 
         public string Sum(string a, string b)
@@ -237,13 +267,167 @@ namespace BigCalculator.Service
 
             char[] aa = result.ToCharArray();
             Array.Reverse(aa);
-            return new string(aa);
+            var diffResult = new string(aa).TrimStart('0');
+            return diffResult;
+        }
+
+        public List<int> FromDecimalToBinary(int[] a)
+        {
+            var bin = new List<int>();
+            var prev = new int[100];
+            var twoPows = new List<string>();
+            twoPows.Add("1");
+            var b = new int[] { 1 };
+            var two = new int[] { 2 };
+
+            if ((a.Length == 1 && a[0] == 0) || a.Length == 0)
+            {
+                bin.Add(0);
+
+                return bin;
+            }
+
+            while (IsSmallerOrEqual(string.Join(string.Empty, b), string.Join(string.Empty, a)))
+            {
+                prev = b;
+                var res = Mul(b, two);
+                twoPows.Add(res);
+                b = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
+            }
+
+            twoPows.RemoveAt(twoPows.Count - 1);
+            twoPows.Reverse();
+
+            foreach (var pow in twoPows)
+            {
+                var aStr = string.Join(string.Empty, a);
+
+                if (IsSmallerOrEqual(pow, aStr))
+                {
+                    var res = Diff(string.Join(string.Empty, a), pow);
+                    a = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
+                    bin.Add(1);
+                }
+                else
+                {
+                    bin.Add(0);
+                }
+            }
+
+            return bin;
+        }
+
+        public List<int> FromBinaryToDecimal(List<int> a)
+        {
+            var pow = new[] { 1 };
+            var two = new[] { 2 };
+            var result = new[] { 0 };
+            var aReverse = a.ToArray().Reverse();
+
+            foreach (var bit in aReverse)
+            {
+                if (bit == 1)
+                {
+                    var res = Sum(string.Join(string.Empty, result), string.Join(string.Empty, pow));
+                    result = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
+                }
+
+                var powStr = Mul(pow, two);
+                pow = Array.ConvertAll(powStr.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            }
+
+            return result.ToList();
+        }
+
+        public int[] Div2(int[] a, int[] b)
+        {
+            var denom = b.ToList();
+            var current = new List<int>();
+            var answer = new List<int>();
+            current.Add(1);
+            answer.Add(0);
+
+            if (IsSmaller(string.Join(string.Empty, a), string.Join(string.Empty, b)))
+            {
+                return new[] { 0 };
+            }
+
+            if (AreEqual(string.Join(string.Empty, a), string.Join(string.Empty, b)))
+            {
+                return new[] { 1 };
+            }
+
+            var denomBin = FromDecimalToBinary(denom.ToArray());
+            var currentBin = FromDecimalToBinary(current.ToArray());
+
+            while (IsSmallerOrEqual(string.Join(string.Empty, denom), string.Join(string.Empty, a)))
+            {
+                denomBin.Add(0);
+                currentBin.Add(0);
+
+                denom = FromBinaryToDecimal(denomBin);
+            }
+            current = FromBinaryToDecimal(currentBin);
+
+            denomBin.RemoveAt(denomBin.Count - 1);
+            currentBin.RemoveAt(currentBin.Count - 1);
+
+            current = FromBinaryToDecimal(currentBin);
+            denom = FromBinaryToDecimal(denomBin);
+            var answerBin = FromDecimalToBinary(answer.ToArray());
+
+            while (currentBin.Count > 0)
+            {
+                if (IsSmallerOrEqual(string.Join(string.Empty, denom), string.Join(string.Empty, a)))
+                {
+                    var res = Diff(string.Join(string.Empty, a), string.Join(string.Empty, denom));
+                    a = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
+
+                    //currentBin = ConvertToBinary(current.ToArray());
+
+                    answerBin = BinaryOr(answerBin, currentBin);
+                }
+
+                answer = FromBinaryToDecimal(answerBin);
+                denomBin.RemoveAt(denomBin.Count - 1);
+                currentBin.RemoveAt(currentBin.Count - 1);
+
+                current = FromBinaryToDecimal(currentBin);
+                denom = FromBinaryToDecimal(denomBin);
+            }
+
+            return FromBinaryToDecimal(answerBin).ToArray();
+        }
+
+        public List<int> BinaryOr(List<int> a, List<int> b)
+        {
+            var len = a.Count > b.Count ? b.Count : a.Count;
+            int i = 0;
+
+            var invA = a.ToArray().Reverse().ToList();
+            var invB = b.ToArray().Reverse().ToList();
+
+            for (i = 0; i < len; i++)
+            {
+                invA[i] = invA[i] | invB[i];
+            }
+
+            if (a.Count < b.Count)
+            {
+                while (i < b.Count)
+                {
+                    invA.Add(invB[i]);
+                    i++;
+                }
+            }
+
+            return invA.ToArray().Reverse().ToList();
         }
 
         public string Div(int[] a, int[] b)
         {
             int b_int = 0;
-            b_int = b.Aggregate((result, x) => result * 10 + x); ;
+            b_int = b.Aggregate((result, x) => result * 10 + x);
             string res = "";
             int idx = 0;
             int temp = a[idx];
