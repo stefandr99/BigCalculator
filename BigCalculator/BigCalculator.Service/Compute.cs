@@ -249,20 +249,21 @@ namespace BigCalculator.Service
 
             for (int i = len_a - len_b - 1; i >= 0; i--)
             {
-                if (a[i] == '0' && carry > 0)
+                if (a[i] == 0 && carry > 0)
                 {
                     result += "9";
                     continue;
                 }
-                int sub = (int)a[i] - carry;
-                if (i > 0 || sub > 0)
+                int sub = a[i] - carry;
+                if (i >= 0 || sub > 0)
                     result += sub.ToString();
                 carry = 0;
             }
 
-            char[] aa = result.ToCharArray();
-            Array.Reverse(aa);
-            return new string(aa).TrimStart('0');
+            char[] resultAsArray = result.ToCharArray();
+            Array.Reverse(resultAsArray);
+            var resultToReturn = new string(resultAsArray).TrimStart('0');
+            return String.IsNullOrEmpty(resultToReturn) ? "0" : resultToReturn;
         }
 
         public string Div(int[] a, int[] b)
