@@ -116,18 +116,22 @@ namespace BigCalculator.Service
 
         private static int[] ConvertStringToIntArray(string x)
         {
-            int[] result = Array.ConvertAll(x.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] result = new int[] { 0 };
+
+            if(!String.IsNullOrEmpty(x))
+            {
+                result = Array.ConvertAll(x.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            }
 
             return result;
         }
 
-        private static int[] ConvertIntToIntArray(int number)
+        /*private static int[] ConvertIntToIntArray(int number)
         {
-            //int[] result = Array.ConvertAll(number.ToString().ToArray(), x => (int)x);
             int[] result = number.ToString().Select(c => (int)Char.GetNumericValue(c)).ToArray();
 
             return result;
-        }
+        }*/
 
         public string Sum(int[] a, int[] b)
         {
@@ -292,45 +296,53 @@ namespace BigCalculator.Service
 
         public string Pow(int[] a, int[] b)
         {
-            int[] res = new int[99999999];
+            string[] res = new string[99999999];
             int[] i = new int[b.Length];
             int j, k = 1;
 
-            res[1] = 1;
+            res[1] = "1";
 
             while (IsSmaller(i, b))
             {
                 for (j = 1; j <= k; j++)
                 {
                     var operand = ConvertStringToIntArray(res[j].ToString());
-                    var operationResult = Mul(operand, a);
-                    res[j] = Int32.Parse(operationResult);
+                    res[j] = Mul(operand, a);
                 }
+
                 for (j = 1; j < k; j++)
                 {
-                    var operand1 = ConvertStringToIntArray(res[j + 1].ToString());
-                    var operand2 = ConvertIntToIntArray(res[j] / 10);
-                    var operationResult = Sum(operand1, operand2);
-                    res[j + 1] = Int32.Parse(operationResult);
-                    res[j] = res[j] % 10;
+                    var operand1 = ConvertStringToIntArray(res[j + 1]);
+                    var operand2 = DivideBy10(res[j]);
+                    res[j + 1] = Sum(operand1, ConvertStringToIntArray(operand2));
+                    res[j] = Modulo10(res[j]);
                 }
-                while (res[j] > 9)
+                while (res[j].Length > 1)
                 {
                     k++;
-                    var operand1 = ConvertIntToIntArray(res[k]);
-                    var operand2 = ConvertIntToIntArray(res[j] / 10);
-                    var operationResult = Sum(operand1, operand2);
-                    res[k] = Int32.Parse(operationResult);
-                    res[k - 1] = res[k - 1] % 10;
+                    var operand1 = ConvertStringToIntArray(res[k]);
+                    var operand2 = DivideBy10(res[j]);
+                    res[k] = Sum(operand1, ConvertStringToIntArray(operand2));
+                    res[k - 1] = Modulo10(res[k - 1]);
                     j++;
                 }
                 i = ConvertStringToIntArray(Sum(i, new int[] { 1 }));
             }
-            string s = "";
+            string result = "";
             for (j = k; j >= 1; j--)
-                s += res[j];
+                result += res[j];
 
-            return s;
+            return result;
+        }
+
+        private static string DivideBy10(string number)
+        {
+            return number.Remove(number.Length - 1, 1);
+        }
+
+        private static string Modulo10(string number)
+        {
+            return (number[number.Length - 1]).ToString();
         }
 
         public string Sqrt(int[] a)
