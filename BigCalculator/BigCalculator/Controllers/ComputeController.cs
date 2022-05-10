@@ -70,7 +70,7 @@
         [HttpPost("Test")]
         public IActionResult Test(int[] a)
         {
-            var result = compute.FromBinaryToDecimal(a.ToList());
+            var result = compute.FromDecimalToBinary(a);
 
             return Ok(result);
         }

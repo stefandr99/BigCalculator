@@ -113,6 +113,13 @@ namespace BigCalculator.Service
             return false;
         }
 
+        private static int[] ConvertStringToIntArray(string x)
+        {
+            int[] result = Array.ConvertAll(x.ToCharArray(), c => (int)Char.GetNumericValue(c));
+
+            return result;
+        }
+
         private static bool IsSmallerOrEqual(string str1, string str2)
         {
             int n1 = str1.Length, n2 = str2.Length;
@@ -142,13 +149,6 @@ namespace BigCalculator.Service
                     return false;
 
             return true;
-        }
-
-        public string Sum(string a, string b)
-        {
-            int[] result = Array.ConvertAll(x.ToCharArray(), c => (int)Char.GetNumericValue(c));
-
-            return result;
         }
 
         private static int[] ConvertIntToIntArray(int number)
@@ -292,7 +292,7 @@ namespace BigCalculator.Service
             return diffResult;
         }
 
-        public List<int> FromDecimalToBinary(int[] a)
+        public List<int> FromDecimalToBinary(List<int> a)
         {
             var bin = new List<int>();
             var prev = new int[100];
@@ -301,7 +301,7 @@ namespace BigCalculator.Service
             var b = new int[] { 1 };
             var two = new int[] { 2 };
 
-            if ((a.Length == 1 && a[0] == 0) || a.Length == 0)
+            if ((a.Count == 1 && a[0] == 0) || a.Count == 0)
             {
                 bin.Add(0);
 
@@ -325,8 +325,8 @@ namespace BigCalculator.Service
 
                 if (IsSmallerOrEqual(pow, aStr))
                 {
-                    var res = Diff(string.Join(string.Empty, a), pow);
-                    a = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
+                    var res = Diff(a.ToArray(), ConvertStringToIntArray(pow));
+                    a = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c)).ToList();
                     bin.Add(1);
                 }
                 else
@@ -349,7 +349,9 @@ namespace BigCalculator.Service
             {
                 if (bit == 1)
                 {
-                    var res = Sum(string.Join(string.Empty, result), string.Join(string.Empty, pow));
+                    var res = Sum(result, pow);
+                    Array.Reverse(result);
+                    Array.Reverse(pow);
                     result = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
                 }
 
@@ -368,7 +370,7 @@ namespace BigCalculator.Service
             current.Add(1);
             answer.Add(0);
 
-            if (IsSmaller(string.Join(string.Empty, a), string.Join(string.Empty, b)))
+            if (IsSmaller(a, b))
             {
                 return new[] { 0 };
             }
@@ -378,8 +380,8 @@ namespace BigCalculator.Service
                 return new[] { 1 };
             }
 
-            var denomBin = FromDecimalToBinary(denom.ToArray());
-            var currentBin = FromDecimalToBinary(current.ToArray());
+            var denomBin = FromDecimalToBinary(denom);
+            var currentBin = FromDecimalToBinary(current);
 
             while (IsSmallerOrEqual(string.Join(string.Empty, denom), string.Join(string.Empty, a)))
             {
@@ -395,16 +397,14 @@ namespace BigCalculator.Service
 
             current = FromBinaryToDecimal(currentBin);
             denom = FromBinaryToDecimal(denomBin);
-            var answerBin = FromDecimalToBinary(answer.ToArray());
+            var answerBin = FromDecimalToBinary(answer);
 
             while (currentBin.Count > 0)
             {
                 if (IsSmallerOrEqual(string.Join(string.Empty, denom), string.Join(string.Empty, a)))
                 {
-                    var res = Diff(string.Join(string.Empty, a), string.Join(string.Empty, denom));
+                    var res = Diff(a, denom.ToArray());
                     a = Array.ConvertAll(res.ToCharArray(), c => (int) Char.GetNumericValue(c));
-
-                    //currentBin = ConvertToBinary(current.ToArray());
 
                     answerBin = BinaryOr(answerBin, currentBin);
                 }
@@ -521,6 +521,7 @@ namespace BigCalculator.Service
         {
             int[] res = new int[] { 0 };
             int[] one = new int[] { 1 };
+
             while (IsSmaller(ConvertStringToIntArray(Mul(res, res)), a))
             {
                 string result = Sum(res, one);
