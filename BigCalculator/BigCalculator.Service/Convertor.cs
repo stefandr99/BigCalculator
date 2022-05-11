@@ -50,15 +50,5 @@
         {
             return string.Join(string.Empty, arr);
         }
-
-        public List<int> FromDecimalToBinary(List<int> a)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<int> FromBinaryToDecimal(List<int> a)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
