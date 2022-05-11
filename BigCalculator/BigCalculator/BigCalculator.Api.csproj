@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BigCalculator.Parser\BigCalculator.Parser.csproj" />
+    <ProjectReference Include="..\BigCalculator.Adapter\BigCalculator.Adapter.csproj" />
+    <ProjectReference Include="..\BigCalculator.Parser\BigCalculator.Calculus.csproj" />
     <ProjectReference Include="..\BigCalculator.Service\BigCalculator.Service.csproj" />
     <ProjectReference Include="..\BigCalculator.Validator\BigCalculator.Validator.csproj" />
   </ItemGroup>

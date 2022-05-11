@@ -4,7 +4,7 @@
     using System.Xml.Serialization;
     using Core;
 
-    public class Convertor
+    public class Convertor : IConvertor
     {
         public Data XmlToData(XElement xml)
         {
@@ -19,7 +19,7 @@
             return data;
         }
 
-        private List<Term> XmlToTerms(XElement xml)
+        public List<Term> XmlToTerms(XElement xml)
         {
             List<Term> terms = new List<Term>();
             var ser = new XmlSerializer(typeof(Term));
@@ -32,6 +32,33 @@
             }
 
             return terms;
+        }
+
+        public int[] FromStringToIntArray(string s)
+        {
+            int[] result = new int[] { 0 };
+
+            if (!String.IsNullOrEmpty(s))
+            {
+                result = Array.ConvertAll(s.ToCharArray(), c => (int)char.GetNumericValue(c));
+            }
+
+            return result;
+        }
+
+        public string FromIntArrayToString(int[] arr)
+        {
+            return string.Join(string.Empty, arr);
+        }
+
+        public List<int> FromDecimalToBinary(List<int> a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<int> FromBinaryToDecimal(List<int> a)
+        {
+            throw new NotImplementedException();
         }
     }
 }

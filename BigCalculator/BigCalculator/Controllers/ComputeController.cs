@@ -3,9 +3,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Service;
     using Validator;
-    using Parser;
     using Core;
     using System.Xml.Linq;
+    using Adapter;
     using Newtonsoft.Json;
 
     [ApiController]
@@ -15,9 +15,9 @@
         private readonly ICompute compute;
         private readonly Validator validator;
         private readonly Parser parser;
-        private readonly Convertor convertor;
+        private readonly IConvertor convertor;
 
-        public ComputeController(ICompute compute, Validator validator, Parser parser, Convertor convertor)
+        public ComputeController(ICompute compute, Validator validator, Parser parser, IConvertor convertor)
         {
             this.compute = compute;
             this.validator = validator;
@@ -34,7 +34,7 @@
 
             var result = compute.ComputeCalculus(postfixExpression, terms);
 
-            return Ok(JsonConvert.SerializeObject(result));
+            return this.FromResult(result);
         }
 
         [HttpPost("Validate")]
@@ -64,8 +64,7 @@
 
             var result = compute.ComputeCalculus(postfixExpression, terms);
 
-            return Ok(JsonConvert.SerializeObject(result));
+            return this.FromResult(result);
         }
-
     }
 }
