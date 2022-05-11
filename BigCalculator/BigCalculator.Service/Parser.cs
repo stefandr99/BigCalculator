@@ -1,7 +1,7 @@
-﻿using System.Collections;
-
-namespace BigCalculator.Parser
+﻿namespace BigCalculator.Service
 {
+    using System.Collections;
+
     public class Parser
     {
         private Dictionary<char, int> operators = new Dictionary<char, int>

@@ -34,6 +34,23 @@
             return terms;
         }
 
+        public int[] FromStringToIntArray(string s)
+        {
+            int[] result = new int[] { 0 };
+
+            if (!String.IsNullOrEmpty(s))
+            {
+                result = Array.ConvertAll(s.ToCharArray(), c => (int)char.GetNumericValue(c));
+            }
+
+            return result;
+        }
+
+        public string FromIntArrayToString(int[] arr)
+        {
+            return string.Join(string.Empty, arr);
+        }
+
         public List<int> FromDecimalToBinary(List<int> a)
         {
             throw new NotImplementedException();

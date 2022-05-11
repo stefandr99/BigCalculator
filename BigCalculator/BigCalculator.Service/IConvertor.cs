@@ -9,6 +9,10 @@ namespace BigCalculator.Service
 
         List<Term> XmlToTerms(XElement xml);
 
+        int[] FromStringToIntArray(string s);
+
+        string FromIntArrayToString(int[] arr);
+
         List<int> FromDecimalToBinary(List<int> a);
 
         List<int> FromBinaryToDecimal(List<int> a);

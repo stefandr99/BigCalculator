@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BigCalculator.Core\BigCalculator.Core.csproj" />
+    <ProjectReference Include="..\BigCalculator.Service\BigCalculator.Service.csproj" />
   </ItemGroup>
 
 </Project>
