@@ -21,7 +21,7 @@
             return compute;
         }
         [Fact]
-        public void When_ComputeCalculus_Given_ValidPostfixedExpressionAndTerms_Then_ExpectedResultIsReturned()
+        public void Given_ComputeCalculus_When_ValidPostfixedExpressionAndTerms_Then_ExpectedResultIsReturned()
         {
             //Arrange
             var compute = CreateDefaultComputeIntance();
@@ -43,7 +43,7 @@
         }
 
         [Fact]
-        public void When_ComputeCalculus_Given_ValidPostfixedExpressionAndTerms_Then_EachStepOfComputationIsReturned()
+        public void Given_ComputeCalculus_Then_ValidPostfixedExpressionAndTerms_Then_EachStepOfComputationIsReturned()
         {
             //Arrange
             var compute = CreateDefaultComputeIntance();

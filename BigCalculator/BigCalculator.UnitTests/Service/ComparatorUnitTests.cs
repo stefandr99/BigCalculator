@@ -22,7 +22,7 @@ namespace BigCalculator.UnitTests.Service
         [Theory]
         [InlineData("0", "1")]
         [InlineData("0", "0")]
-        public void When_IsSmallerOrEqual_Given_FirstSmallerOrEqualThanSecond_Then_ReturnsTrue(string firstValue, string secondValue)
+        public void Given_IsSmallerOrEqual_When_FirstSmallerOrEqualThanSecond_Then_ReturnsTrue(string firstValue, string secondValue)
         {
             //Arrange
             var comparator = new Comparator();
@@ -35,7 +35,7 @@ namespace BigCalculator.UnitTests.Service
         }
 
         [Fact]
-        public void When_IsEqual_Given_EqualValues_Then_ReturnsTrue()
+        public void Given_IsEqual_When_EqualValues_Then_ReturnsTrue()
         {
             //Arrange
             var comparator = new Comparator();
