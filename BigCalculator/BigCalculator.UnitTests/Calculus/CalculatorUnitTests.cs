@@ -142,5 +142,21 @@ namespace BigCalculator.UnitTests.Calculus
             //Assert
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void Given_Sum_When_OneOperandIsZero_Then_ResultIsEqualToTheOtherOperand()
+        {
+            //Arrange
+            var calculator = CreateNewCalculator();
+            int[] firstOperand = new int[] { 1, 2, 3 };
+            int[] secondOperand = new int[] { 0 };
+            string expected = "123";
+
+            //Act
+            var result = calculator.Sum(firstOperand, secondOperand);
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
     }
 }
