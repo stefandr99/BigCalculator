@@ -10,5 +10,12 @@ namespace BigCalculator.Core
 
         [XmlElement("value")]
         public string Value { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            Term other = obj as Term;
+
+            return other.Name == Name && other.Value == Value;
+        }
     }
 }

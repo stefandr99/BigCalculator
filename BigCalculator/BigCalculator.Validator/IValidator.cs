@@ -2,7 +2,7 @@
 {
     using Core;
 
-    internal interface IValidator
+    public interface IValidator
     {
         Result<string> Validate(Data data);
     }

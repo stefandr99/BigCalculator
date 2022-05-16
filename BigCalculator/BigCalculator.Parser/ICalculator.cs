@@ -13,5 +13,9 @@
         string Pow(int[] a, int[] b);
 
         string Sqrt(int[] a);
+
+        List<int> FromDecimalToBinary(List<int> a);
+
+        List<int> FromBinaryToDecimal(List<int> a);
     }
 }

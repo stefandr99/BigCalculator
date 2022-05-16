@@ -18,20 +18,6 @@
             return terms;
         }
 
-        public static string GetIndexedTerm(this string expression, int index)
-        {
-            var term = new StringBuilder();
-
-            while (Char.IsLetter(expression[index]))
-            {
-                term.Append(expression[index]);
-
-                index--;
-            }
-
-            return new string(term.ToString().Reverse().ToArray());
-        }
-
         public static string FromXmlToExpression(this XElement element)
         {
             StringBuilder sb = new StringBuilder();

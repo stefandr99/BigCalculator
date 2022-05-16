@@ -251,6 +251,11 @@
 
         public string Sqrt(int[] a)
         {
+            if (a[0] < 0)
+            {
+                return "-1";
+            }
+
             int[] res = new int[] { 0 };
             int[] one = new int[] { 1 };
 
@@ -268,6 +273,11 @@
 
         public List<int> FromDecimalToBinary(List<int> a)
         {
+            if (a[0] < 0)
+            {
+                return new() { -1 };
+            }
+
             var bin = new List<int>();
             var twoPow = new List<string> { "1" };
             var b = new[] { 1 };
@@ -311,6 +321,11 @@
 
         public List<int> FromBinaryToDecimal(List<int> a)
         {
+            if (a.Distinct().Count() > 2)
+            {
+                return new() { -1 };
+            }
+
             var pow = new[] { 1 };
             var two = new[] { 2 };
             var result = new[] { 0 };

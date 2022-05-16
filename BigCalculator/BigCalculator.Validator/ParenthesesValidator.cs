@@ -2,7 +2,7 @@
 {
     using Core;
 
-    internal class ParenthesesValidator : IValidator
+    public class ParenthesesValidator : IValidator
     {
         public Result<string> Validate(Data data)
         {
@@ -14,10 +14,10 @@
                     opened++;
                 else if (c == ')')
                     opened--;
-
-                if (opened < 0)
-                    return new InvalidResult<string>("Invalid parentheses!");
             }
+
+            if (opened != 0)
+                return new InvalidResult<string>("Invalid parentheses!");
 
             return new SuccessResult<string>("Success!");
         }

@@ -1,7 +1,7 @@
 ﻿namespace BigCalculator.Validator
 {
     using Core;
-using System.Linq;
+    using System.Linq;
 
     public class OperatorsValidator : IValidator
     {

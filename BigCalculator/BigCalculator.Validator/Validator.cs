@@ -1,7 +1,9 @@
 ﻿namespace BigCalculator.Validator
 {
     using Core;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class Validator
     {
         public Result<string> Validate(Data data)

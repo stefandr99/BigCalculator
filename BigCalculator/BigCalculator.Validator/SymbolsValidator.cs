@@ -3,7 +3,7 @@
     using Core;
     using System.Text.RegularExpressions;
 
-    internal class SymbolsValidator : IValidator
+    public class SymbolsValidator : IValidator
     {
         public Result<string> Validate(Data data)
         {
