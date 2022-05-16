@@ -65,7 +65,12 @@
                         if (operationResult.Equals("-1"))
                         {
                             results["error"] = "Negative result of subsctraction: " + firstOperand + " " + x + " " + secondOperand;
-                            return new InvalidResult<Dictionary<string, string>>(results["error"]);
+                            return new IncorrectCalculus<Dictionary<string, string>>(results);
+                        }
+                        if (operationResult.Equals("-2"))
+                        {
+                            results["error"] = "Attempt of division by zero: " + firstOperand + " " + x + " " + secondOperand;
+                            return new IncorrectCalculus<Dictionary<string, string>>(results);
                         }
 
                         results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;

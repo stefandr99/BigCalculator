@@ -19,6 +19,8 @@ namespace BigCalculator.Api.Controllers
                     return controller.BadRequest(result.Errors);
                 case ResultType.Unauthorized:
                     return controller.Unauthorized();
+                case ResultType.IncorrectOutcome:
+                    return controller.Ok(result.Data);
                 default:
                     throw new Exception("An unhandled result has occurred as a result of a service call.");
             }

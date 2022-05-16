@@ -34,6 +34,22 @@
         public override T Data => default(T);
     }
 
+    public class IncorrectCalculus<T>: Result<T>
+    {
+        private readonly T _data;
+
+        public IncorrectCalculus(T data)
+        {
+            _data = data;
+        }
+        public override ResultType ResultType => ResultType.IncorrectOutcome;
+
+        public override List<string> Errors => new List<string>();
+
+        public override T Data => _data;
+
+    }
+
     public class SuccessResult<T> : Result<T>
     {
         private readonly T _data;
@@ -58,6 +74,7 @@
         PartialOk,
         NotFound,
         PermissionDenied,
-        Unexpected
+        Unexpected,
+        IncorrectOutcome
     }
 }

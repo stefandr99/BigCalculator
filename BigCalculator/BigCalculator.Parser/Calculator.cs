@@ -158,7 +158,7 @@
 
             if (b[0] == 0)
             {
-                return "-1";
+                return "-2";
             }
 
             if (comparator.IsSmaller(a, b))
