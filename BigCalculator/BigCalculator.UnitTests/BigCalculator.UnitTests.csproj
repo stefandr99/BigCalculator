@@ -22,6 +22,10 @@
     </PackageReference>
   </ItemGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\BigCalculator.Adapter\BigCalculator.Adapter.csproj" />
     <ProjectReference Include="..\BigCalculator.Core\BigCalculator.Core.csproj" />

@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigCalculator.Core", "BigCa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigCalculator.Adapter", "BigCalculator.Adapter\BigCalculator.Adapter.csproj", "{CB2D45D1-4B6B-4FD9-BAB5-533B50DEC3D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigCalculator.UnitTests", "BigCalculator.UnitTests\BigCalculator.UnitTests.csproj", "{9AA00246-A118-4BAF-817F-3CB83D8089EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigCalculator.UnitTests", "BigCalculator.UnitTests\BigCalculator.UnitTests.csproj", "{9AA00246-A118-4BAF-817F-3CB83D8089EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

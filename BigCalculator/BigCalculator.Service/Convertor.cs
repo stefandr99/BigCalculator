@@ -48,7 +48,12 @@
 
         public string FromIntArrayToString(int[] arr)
         {
-            return string.Join(string.Empty, arr);
+            if (arr != null)
+            {
+                return string.Join(string.Empty, arr);
+            }
+
+            return "-1";
         }
     }
 }

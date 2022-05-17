@@ -3,7 +3,7 @@
     using Core;
     using System.Text.RegularExpressions;
 
-    internal class TermsValidator : IValidator
+    public class TermsValidator : IValidator
     {
         public Result<string> Validate(Data data)
         {
@@ -15,6 +15,14 @@
             foreach (var t in expressionTerms)
             {
                 if (!terms.Contains(t))
+                {
+                    return new InvalidResult<string>("Invalid terms!");
+                }
+            }
+
+            foreach (var t in terms)
+            {
+                if (!expressionTerms.Contains(t))
                 {
                     return new InvalidResult<string>("Invalid terms!");
                 }

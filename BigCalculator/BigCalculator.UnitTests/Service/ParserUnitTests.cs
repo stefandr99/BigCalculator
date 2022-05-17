@@ -11,13 +11,13 @@ namespace BigCalculator.UnitTests.Service
         [InlineData("((a+b)/(#(c-d)))", "ab+cd-#/")]
         public void Given_Parser_When_ExpressionIsValidated_then_ExpressionIsPostfixed(string input, string expected)
         {
-            //Arange
+            //Arrange
             var parser = new Parser();
 
             //Act
             var actualExpression = parser.MakePostfix(input);
 
-            //Asert
+            //Assert
             Assert.Equal(expected, actualExpression);
         }
     }

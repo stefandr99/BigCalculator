@@ -29,12 +29,12 @@
 
         public string DivideBy10(string number)
         {
-            return number.Remove(number.Length - 1, 1);
+            return string.IsNullOrEmpty(number) ? "" : number.Remove(number.Length - 1, 1);
         }
 
         public string Modulo10(string number)
         {
-            return number[number.Length - 1].ToString();
+            return string.IsNullOrEmpty(number) ? "" : number[number.Length - 1].ToString();
         }
     }
 }

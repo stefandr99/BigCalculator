@@ -25,15 +25,6 @@
         public override T Data => default(T);
     }
 
-    public class UnexpectedResult<T> : Result<T>
-    {
-        public override ResultType ResultType => ResultType.Unexpected;
-
-        public override List<string> Errors => new List<string> { "There was an unexpected problem" };
-
-        public override T Data => default(T);
-    }
-
     public class IncorrectCalculus<T>: Result<T>
     {
         private readonly T _data;
@@ -42,12 +33,12 @@
         {
             _data = data;
         }
+
         public override ResultType ResultType => ResultType.IncorrectOutcome;
 
         public override List<string> Errors => new List<string>();
 
         public override T Data => _data;
-
     }
 
     public class SuccessResult<T> : Result<T>
