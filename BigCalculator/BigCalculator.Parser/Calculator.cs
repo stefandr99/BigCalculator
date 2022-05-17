@@ -91,9 +91,6 @@
             while (i >= 0 && result[i] == 0)
                 i--;
 
-            if (i == -1)
-                return "0";
-
             String s = "";
 
             while (i >= 0)
