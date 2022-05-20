@@ -1,6 +1,7 @@
 ﻿namespace BigCalculator.Calculus
 {
     using Service;
+    using System.Diagnostics;
 
     public class Calculator : ICalculator
     {
@@ -17,6 +18,18 @@
 
         public string Sum(int[] a, int[] b)
         {
+            for (int i = 0; i < a.Length; i++)
+            {
+                Debug.Assert(a[i] >= 0, "First operand has negative values");
+                Debug.Assert(a[i].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
+            for (int i = 0; i < b.Length; i++)
+            {
+                Debug.Assert(b[i] >= 0, "Second operand has negative values");
+                Debug.Assert(b[i].ToString().Length == 1, "Second operand has multiple values on individual fields");
+            }
+
             Array.Reverse(a);
             Array.Reverse(b);
 
@@ -26,6 +39,8 @@
 
             for (int i = 0; i < maxLength; i++)
             {
+                Debug.Assert(i>-1 | i < maxLength, "i is outside the loop");
+
                 int lhs = (i < a.Length) ? a[i] : 0;
                 int rhs = (i < b.Length) ? b[i] : 0;
 
@@ -47,11 +62,26 @@
             while (j >= 0)
                 s += (result[j--]);
 
+            Debug.Assert(s.Length >= maxLength,"Sum is shorter than the operands");
+            // TODO: Check if sum is positive
+            //verificarea daca suma da rezultat corect probabil trebuie facuta in celelalte clase
             return s;
         }
 
         public string Mul(int[] a, int[] b)
         {
+            for (int j = 0; j < a.Length; j++)
+            {
+                Debug.Assert(a[j] >= 0, "First operand has negative values");
+                Debug.Assert(a[j].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
+            for (int j = 0; j < b.Length; j++)
+            {
+                Debug.Assert(b[j] >= 0, "Second operand has negative values");
+                Debug.Assert(b[j].ToString().Length == 1, "Second operand has multiple values on individual fields");
+            }
+
             int lenA = a.Length;
             int lenB = b.Length;
             if (a[0] == 0 || b[0] == 0)
@@ -64,6 +94,7 @@
 
             for (i = lenA - 1; i >= 0; i--)
             {
+                Debug.Assert(i > -1 | i < lenA, "i is outside the loop");
                 int carry = 0;
                 int n1 = a[i];
                 var lastB = 0;
@@ -96,13 +127,30 @@
             while (i >= 0)
                 s += (result[i--]);
 
+            Debug.Assert(s.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
+            // TODO: Check if mul is positive
             return s;
         }
 
         public string Diff(int[] a, int[] b)
         {
+            for (int j = 0; j < a.Length; j++)
+            {
+                Debug.Assert(a[j] >= 0, "First operand has negative values");
+                Debug.Assert(a[j].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
+            for (int j = 0; j < b.Length; j++)
+            {
+                Debug.Assert(b[j] >= 0, "Second operand has negative values");
+                Debug.Assert(b[j].ToString().Length == 1, "Second operand has multiple values on individual fields");
+            }
+
             if (comparator.IsSmaller(a, b))
                 return "-1";
+
+            // trebuie facute si astfel de assert-uri?
+            Debug.Assert(!comparator.IsSmaller(a, b), "Algorithm trying to reduce big number from small number");
 
             string result = "";
 
@@ -139,14 +187,30 @@
                 carry = 0;
             }
 
+
+            Debug.Assert(result.Length <= Math.Max(a.Length, b.Length), "Diff is larger than the operands");
             char[] resultAsArray = result.ToCharArray();
             Array.Reverse(resultAsArray);
             var resultToReturn = new string(resultAsArray).TrimStart('0');
+            // TODO: Check if diff is positive
             return string.IsNullOrEmpty(resultToReturn) ? "0" : resultToReturn;
         }
 
         public string Div(int[] a, int[] b)
         {
+            for (int j = 0; j < a.Length; j++)
+            {
+                Debug.Assert(a[j] >= 0, "First operand has negative values");
+                Debug.Assert(a[j].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
+            for (int j = 0; j < b.Length; j++)
+            {
+                Debug.Assert(b[j] >= 0, "Second operand has negative values");
+                Debug.Assert(b[j].ToString().Length == 1, "Second operand has multiple values on individual fields");
+            }
+
+            Debug.Assert(b[0] != 0, "Divisor is null"); 
             var denom = b.ToList();
             var current = new List<int>();
             var answer = new List<int>();
@@ -202,11 +266,24 @@
             }
 
             var arrayResult = FromBinaryToDecimal(answerBin).ToArray();
+            // TODO: Check if div is positive
             return convertor.FromIntArrayToString(arrayResult);
         }
 
         public string Pow(int[] a, int[] b)
         {
+            for (int it = 0; it < a.Length; it++)
+            {
+                Debug.Assert(a[it] >= 0, "First operand has negative values");
+                Debug.Assert(a[it].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
+            for (int it = 0; it < b.Length; it++)
+            {
+                Debug.Assert(b[it] >= 0, "Second operand has negative values");
+                Debug.Assert(b[it].ToString().Length == 1, "Second operand has multiple values on individual fields");
+            }
+
             string[] res = new string[99999999];
             int[] i = new int[b.Length];
             int j, k = 1;
@@ -243,11 +320,19 @@
             for (j = k; j >= 1; j--)
                 result += res[j];
 
+            Debug.Assert(result.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
+            // TODO: Check if pow is positive
             return result;
         }
 
         public string Sqrt(int[] a)
         {
+            for (int it = 0; it < a.Length; it++)
+            {
+                Debug.Assert(a[it] >= 0, "First operand has negative values");
+                Debug.Assert(a[it].ToString().Length == 1, "First operator has multiple values on individual fields");
+            }
+
             if (a[0] < 0)
             {
                 return "-1";
