@@ -2,6 +2,7 @@
 {
     using System.Xml.Linq;
     using System.Xml.Serialization;
+    using System.Diagnostics;
     using Core;
 
     public class Convertor : IConvertor
@@ -43,6 +44,7 @@
                 result = Array.ConvertAll(s.ToCharArray(), c => (int)char.GetNumericValue(c));
             }
 
+            Debug.Assert(s.Length == result.Count(), "Numbers don't have equal lengths");
             return result;
         }
 
@@ -50,7 +52,9 @@
         {
             if (arr != null)
             {
-                return string.Join(string.Empty, arr);
+                var result=string.Join(string.Empty, arr);
+                Debug.Assert(arr.Length == result.Count(), "Numbers don't have equal lengths");
+                return result;
             }
 
             return "-1";
