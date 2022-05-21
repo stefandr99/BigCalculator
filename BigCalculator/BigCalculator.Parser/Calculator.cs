@@ -39,7 +39,6 @@
 
             for (int i = 0; i < maxLength; i++)
             {
-                Debug.Assert(i>-1 | i < maxLength, "i is outside the loop");
 
                 int lhs = (i < a.Length) ? a[i] : 0;
                 int rhs = (i < b.Length) ? b[i] : 0;
@@ -62,9 +61,8 @@
             while (j >= 0)
                 s += (result[j--]);
 
-            Debug.Assert(s.Length >= maxLength,"Sum is shorter than the operands");
-            // TODO: Check if sum is positive
-            //verificarea daca suma da rezultat corect probabil trebuie facuta in celelalte clase
+            Debug.Assert(s.Length >= maxLength, "Sum is shorter than the operands");
+            Debug.Assert(s.All(char.IsDigit), "Result contains negative values");
             return s;
         }
 
@@ -94,7 +92,6 @@
 
             for (i = lenA - 1; i >= 0; i--)
             {
-                Debug.Assert(i > -1 | i < lenA, "i is outside the loop");
                 int carry = 0;
                 int n1 = a[i];
                 var lastB = 0;
@@ -128,7 +125,7 @@
                 s += (result[i--]);
 
             Debug.Assert(s.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
-            // TODO: Check if mul is positive
+            Debug.Assert(s.All(char.IsDigit), "Result contains negative values");
             return s;
         }
 
@@ -148,9 +145,6 @@
 
             if (comparator.IsSmaller(a, b))
                 return "-1";
-
-            // trebuie facute si astfel de assert-uri?
-            Debug.Assert(!comparator.IsSmaller(a, b), "Algorithm trying to reduce big number from small number");
 
             string result = "";
 
@@ -189,10 +183,10 @@
 
 
             Debug.Assert(result.Length <= Math.Max(a.Length, b.Length), "Diff is larger than the operands");
+            Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
             char[] resultAsArray = result.ToCharArray();
             Array.Reverse(resultAsArray);
             var resultToReturn = new string(resultAsArray).TrimStart('0');
-            // TODO: Check if diff is positive
             return string.IsNullOrEmpty(resultToReturn) ? "0" : resultToReturn;
         }
 
@@ -321,7 +315,7 @@
                 result += res[j];
 
             Debug.Assert(result.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
-            // TODO: Check if pow is positive
+            Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
             return result;
         }
 
@@ -350,11 +344,19 @@
             if (Mul(res, res).Equals(convertor.FromIntArrayToString(a)))
                 return convertor.FromIntArrayToString(res);
 
-            return Diff(res, one);
+            string final= Diff(res, one);
+            Debug.Assert(final.All(char.IsDigit), "Result contains negative values");
+            return final;
         }
 
         public List<int> FromDecimalToBinary(List<int> a)
         {
+            for (int it = 0; it < a.Count; it++)
+            {
+                Debug.Assert(a[it] >= 0, "Number has negative values");
+                Debug.Assert(a[it].ToString().Length == 1, "Number has multiple values on individual fields");
+            }
+
             if (a[0] < 0)
             {
                 return new() { -1 };
@@ -397,12 +399,15 @@
                     bin.Add(0);
                 }
             }
+                Debug.Assert(bin.Distinct().Count() > 2, "Binary conversion contains values that are not 0 or 1");
 
             return bin;
         }
 
         public List<int> FromBinaryToDecimal(List<int> a)
         {
+                Debug.Assert(a.Distinct().Count() > 2, "Binary number contains values that are not 0 or 1");
+
             if (a.Distinct().Count() > 2)
             {
                 return new() { -1 };
@@ -425,6 +430,12 @@
 
                 var powStr = Mul(pow, two);
                 pow = convertor.FromStringToIntArray(powStr);
+            }
+
+            for (int it = 0; it < a.Count; it++)
+            {
+                Debug.Assert(result[it] >= 0, "Result has negative values");
+                Debug.Assert(result[it].ToString().Length == 1, "Result has multiple values on individual fields");
             }
 
             return result.ToList();
