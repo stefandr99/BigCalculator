@@ -18,13 +18,16 @@
 
         public string Sum(int[] a, int[] b)
         {
-            for (int i = 0; i < a.Length; i++)
+            Debug.Assert((a.Length > 1 ? a[0] > 0 : a[0] >= 0) && a[0].ToString().Length == 1, "First digit of first operand not valid");
+            Debug.Assert((b.Length > 1 ? b[0] > 0 : b[0] >= 0) && b[0].ToString().Length == 1, "First digit of second operand not valid");
+
+            for (int i = 1; i < a.Length; i++)
             {
                 Debug.Assert(a[i] >= 0, "First operand has negative values");
                 Debug.Assert(a[i].ToString().Length == 1, "First operator has multiple values on individual fields");
             }
 
-            for (int i = 0; i < b.Length; i++)
+            for (int i = 1; i < b.Length; i++)
             {
                 Debug.Assert(b[i] >= 0, "Second operand has negative values");
                 Debug.Assert(b[i].ToString().Length == 1, "Second operand has multiple values on individual fields");
@@ -33,35 +36,45 @@
             Array.Reverse(a);
             Array.Reverse(b);
 
-            int[] result = new int[a.Length + b.Length];
+            //int[] result = new int[a.Length + b.Length];
 
             int maxLength = Math.Max(a.Length, b.Length);
 
+            int[] result = new int[maxLength + 1];
+
+            int lhs = 0, rhs = 0, sum = 0, carry = 0;
+
+            Debug.Assert(result[0] == (lhs + rhs + carry) % 10);
             for (int i = 0; i < maxLength; i++)
             {
+                Debug.Assert(maxLength - i > 0); //variant
+                Debug.Assert(result[i] >= 0, "Digit of result is negative");
 
-                int lhs = (i < a.Length) ? a[i] : 0;
-                int rhs = (i < b.Length) ? b[i] : 0;
+                lhs = (i < a.Length) ? a[i] : 0;
+                rhs = (i < b.Length) ? b[i] : 0;
 
-                int sum = result[i] + lhs + rhs;
+                sum = result[i] + lhs + rhs;
                 result[i] = sum % 10;
 
-                int carry = sum / 10;
+                Debug.Assert(result[i] == (lhs + rhs + carry) % 10);
+
+                carry = sum / 10;
                 result[i + 1] = result[i + 1] + carry;
             }
 
             int j = result.Length - 1;
-            while (j >= 0 && result[j] == 0)
+            if (result[j] == 0)
                 j--;
 
-            if (j == -1)
-                return "0";
             String s = "";
 
             while (j >= 0)
+            {
+                Debug.Assert(j >= 0); //variant
                 s += (result[j--]);
+            }
 
-            Debug.Assert(s.Length >= maxLength, "Sum is shorter than the operands");
+            Debug.Assert(s.Length >= maxLength, "Length of the result is shorter than expected");
             Debug.Assert(s.All(char.IsDigit), "Result contains negative values");
             return s;
         }
@@ -204,7 +217,7 @@
                 Debug.Assert(b[j].ToString().Length == 1, "Second operand has multiple values on individual fields");
             }
 
-            Debug.Assert(b[0] != 0, "Divisor is null"); 
+            Debug.Assert(b[0] != 0, "Divisor is null");
             var denom = b.ToList();
             var current = new List<int>();
             var answer = new List<int>();
@@ -344,7 +357,7 @@
             if (Mul(res, res).Equals(convertor.FromIntArrayToString(a)))
                 return convertor.FromIntArrayToString(res);
 
-            string final= Diff(res, one);
+            string final = Diff(res, one);
             Debug.Assert(final.All(char.IsDigit), "Result contains negative values");
             return final;
         }
@@ -399,14 +412,14 @@
                     bin.Add(0);
                 }
             }
-                Debug.Assert(bin.Distinct().Count() > 2, "Binary conversion contains values that are not 0 or 1");
+            Debug.Assert(bin.Distinct().Count() > 2, "Binary conversion contains values that are not 0 or 1");
 
             return bin;
         }
 
         public List<int> FromBinaryToDecimal(List<int> a)
         {
-                Debug.Assert(a.Distinct().Count() > 2, "Binary number contains values that are not 0 or 1");
+            Debug.Assert(a.Distinct().Count() > 2, "Binary number contains values that are not 0 or 1");
 
             if (a.Distinct().Count() > 2)
             {
