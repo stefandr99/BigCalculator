@@ -46,7 +46,7 @@
             for (int i = 0; i < maxLength; i++)
             {
                 Debug.Assert(maxLength - i > 0); //variant
-                Debug.Assert(result[i] >= 0, "Digit of result is negative");
+                Debug.Assert(result[i] >= 0, "Digit of result is negative"); //invariant
 
                 lhs = (i < a.Length) ? a[i] : 0;
                 rhs = (i < b.Length) ? b[i] : 0;
