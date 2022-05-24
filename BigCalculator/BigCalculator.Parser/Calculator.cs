@@ -46,7 +46,7 @@
             for (int i = 0; i < maxLength; i++)
             {
                 Debug.Assert(maxLength - i > 0); //variant
-                Debug.Assert(result[i] >= 0, "Digit of result is negative");
+                Debug.Assert(result[i] >= 0, "Digit of result is negative"); //invariant
 
                 lhs = (i < a.Length) ? a[i] : 0;
                 rhs = (i < b.Length) ? b[i] : 0;
@@ -105,7 +105,7 @@
 
             for (i = lenA - 1; i >= 0; i--)
             {
-                Debug.Assert(i >= 0);
+                Debug.Assert(i >= 0); //variant
                 
                 carry = 0;
                 int n1 = a[i];
@@ -113,8 +113,8 @@
 
                 for (int j = lenB - 1; j >= 0; j--)
                 {
-                    Debug.Assert(i >= 0);
-                    Debug.Assert(result[lastA + lastB].ToString().Length == 1);
+                    Debug.Assert(i >= 0); //variant
+                    Debug.Assert(result[lastA + lastB].ToString().Length == 1); //invariant
 
                     int n2 = b[j];
 
