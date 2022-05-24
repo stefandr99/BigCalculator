@@ -251,13 +251,20 @@
 
             var denomBin = FromDecimalToBinary(denom);
             var currentBin = FromDecimalToBinary(current);
+            var previous = denomBin;
 
             while (comparator.IsSmallerOrEqual(convertor.FromIntArrayToString(denom.ToArray()), convertor.FromIntArrayToString(a)))
             {
+                Debug.Assert(denom.Count <= a.Length, "Denom length is greater than dividend"); // invariant
+
+                previous = denomBin.ToList();
                 denomBin.Add(0);
                 currentBin.Add(0);
 
                 denom = FromBinaryToDecimal(denomBin);
+
+                Debug.Assert(previous.Count == denomBin.Count - 1,
+                    "At every iteration, previous denom should have count - 1 than current"); // invariant
             }
 
             denomBin.RemoveAt(denomBin.Count - 1);
@@ -283,7 +290,12 @@
             }
 
             var arrayResult = FromBinaryToDecimal(answerBin).ToArray();
-            // TODO: Check if div is positive
+
+            foreach (var t in arrayResult)
+            {
+                Debug.Assert(t >= 0, "Div result contains negative number");
+            }
+
             return convertor.FromIntArrayToString(arrayResult);
         }
 
@@ -404,7 +416,12 @@
 
             while (comparator.IsSmallerOrEqual(convertor.FromIntArrayToString(b), convertor.FromIntArrayToString(a.ToArray())))
             {
+                Debug.Assert(b.Length <= a.Count, "The biggest 2 power is greater than number a"); // invariant
+
                 var res = Mul(b, two);
+
+                Debug.Assert((int)res[^1] % 2 == 0, "Last number of an even elements is not an even element"); // invariant
+
                 twoPow.Add(res);
                 b = convertor.FromStringToIntArray(res);
             }
@@ -414,6 +431,8 @@
 
             foreach (var pow in twoPow)
             {
+                Debug.Assert((int)pow[^1] % 2 == 0, "Last number of an even elements is not an even element"); // invariant
+
                 var aStr = convertor.FromIntArrayToString(a.ToArray());
 
                 if (comparator.IsSmallerOrEqual(pow, aStr))
@@ -427,14 +446,17 @@
                     bin.Add(0);
                 }
             }
-            Debug.Assert(bin.Distinct().Count() > 2, "Binary conversion contains values that are not 0 or 1");
+
+            var distinct = bin.Distinct();
+            Debug.Assert(distinct.Count() is <= 2 and >= 0, "Binary conversion contains values that are not 0 or 1");
 
             return bin;
         }
 
         public List<int> FromBinaryToDecimal(List<int> a)
         {
-            Debug.Assert(a.Distinct().Count() > 2, "Binary number contains values that are not 0 or 1");
+            var distinct = a.Distinct();
+            Debug.Assert(distinct.Count() is <= 2 and >= 0, "Binary number contains values that are not 0 or 1");
 
             if (a.Distinct().Count() > 2)
             {
@@ -457,10 +479,11 @@
                 }
 
                 var powStr = Mul(pow, two);
+                Debug.Assert((int)powStr[^1] % 2 == 0, "Last number of an even number is an even number"); // invariant
                 pow = convertor.FromStringToIntArray(powStr);
             }
 
-            for (int it = 0; it < a.Count; it++)
+            for (int it = 0; it < result.Length; it++)
             {
                 Debug.Assert(result[it] >= 0, "Result has negative values");
                 Debug.Assert(result[it].ToString().Length == 1, "Result has multiple values on individual fields");

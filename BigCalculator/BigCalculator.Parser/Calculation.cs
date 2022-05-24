@@ -5,6 +5,11 @@
     {
         public List<int> BinaryOr(List<int> a, List<int> b)
         {
+            var distinctA = a.Distinct();
+            Debug.Assert(distinctA.Count() is <= 2 and >= 0, "Binary number a contains values that are not 0 or 1");
+            var distinctB = b.Distinct();
+            Debug.Assert(distinctB.Count() is <= 2 and >= 0, "Binary number b contains values that are not 0 or 1");
+
             var len = a.Count > b.Count ? b.Count : a.Count;
             int i;
 
@@ -24,6 +29,13 @@
                     i++;
                 }
             }
+
+            Debug.Assert(invA.Count(x => x == 1) >= a.Count(x => x == 1),
+                "The number of 1s in the final array is lower than the first element");
+            Debug.Assert(invA.Count(x => x == 1) >= b.Count(x => x == 1),
+                "The number of 1s in the final array is lower than the second element");
+            Debug.Assert(invA.Count == Math.Max(a.Count, b.Count),
+                "The binary or result array length is not equal with the greatest array as parameter");
 
             return invA.ToArray().Reverse().ToList();
         }

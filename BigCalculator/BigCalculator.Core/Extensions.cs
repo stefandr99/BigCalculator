@@ -1,5 +1,6 @@
 ﻿namespace BigCalculator.Core
 {
+    using System.Diagnostics;
     using System.Text;
     using System.Xml.Linq;
 
@@ -10,10 +11,11 @@
             List<string> terms = new();
 
             foreach (var term in data.Terms)
-
             {
                 terms.Add(term.Name);
             }
+
+            Debug.Assert(terms.Count == data.Terms.Count(), "Data and terms list have ni equal length");
 
             return terms;
         }
