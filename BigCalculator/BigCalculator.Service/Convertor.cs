@@ -44,7 +44,7 @@
                 result = Array.ConvertAll(s.ToCharArray(), c => (int)char.GetNumericValue(c));
             }
 
-            Debug.Assert(s.Length == result.Count(), "Numbers don't have equal lengths");
+            Debug.Assert(!String.IsNullOrEmpty(s) ? s.Length == result.Count() : result.Length == 1, "Numbers don't have equal lengths");
             return result;
         }
 
