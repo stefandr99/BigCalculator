@@ -346,13 +346,14 @@
                     res[k - 1] = calculation.Modulo10(res[k - 1]);
                     j++;
                 }
-                i = convertor.FromStringToIntArray(Sum(i, new[] { 1 }));
+                var valueTuIncrement = i[0] > 0 ? i : new int[] { i[1] };
+                i = convertor.FromStringToIntArray(Sum(valueTuIncrement, new[] { 1 }));
             }
             string result = "";
             for (j = k; j >= 1; j--)
                 result += res[j];
 
-            Debug.Assert(b[0] == 0 ? result.Length == 1 : result.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
+            Debug.Assert(b[0] == 0 ? result.Length == 1 : result.Length >= Math.Max(a.Length, b.Length), "Invalid length of result");
             Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
             return result;
         }
