@@ -43,6 +43,7 @@
             int lhs = 0, rhs = 0, sum = 0, carry = 0;
 
             Debug.Assert(result[0] == (lhs + rhs + carry) % 10);
+
             for (int i = 0; i < maxLength; i++)
             {
                 Debug.Assert(maxLength - i > 0); //variant
@@ -74,6 +75,7 @@
 
             Debug.Assert(s.Length >= maxLength, "Length of the result is shorter than expected");
             Debug.Assert(s.All(char.IsDigit), "Result contains negative values");
+
             return s;
         }
 
@@ -144,6 +146,7 @@
 
             Debug.Assert(s.Length >= Math.Max(a.Length, b.Length), "Result of multiplication is shorter than the operands");
             Debug.Assert(s.All(char.IsDigit), "Result contains negative values");
+
             return s;
         }
 
@@ -168,16 +171,15 @@
                 return "-1";
 
             string result = "";
-
             int lenA = a.Length;
             int lenB = b.Length;
             int diff = lenA - lenB;
-
             int carry = 0;
 
             for (int i = lenB - 1; i >= 0; i--)
             {
                 int sub = a[i + diff] - b[i] - carry;
+
                 if (sub < 0)
                 {
                     sub = sub + 10;
@@ -196,18 +198,21 @@
                     result += "9";
                     continue;
                 }
+
                 int sub = a[i] - carry;
+
                 if (i >= 0 || sub > 0)
                     result += sub.ToString();
                 carry = 0;
             }
 
-
             Debug.Assert(result.Length <= Math.Max(a.Length, b.Length), "Diff is larger than the operands");
             Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
+
             char[] resultAsArray = result.ToCharArray();
             Array.Reverse(resultAsArray);
             var resultToReturn = new string(resultAsArray).TrimStart('0');
+
             return string.IsNullOrEmpty(resultToReturn) ? "0" : resultToReturn;
         }
 
@@ -269,7 +274,6 @@
 
             denomBin.RemoveAt(denomBin.Count - 1);
             currentBin.RemoveAt(currentBin.Count - 1);
-
             denom = FromBinaryToDecimal(denomBin);
             var answerBin = FromDecimalToBinary(answer);
 
@@ -285,7 +289,6 @@
 
                 denomBin.RemoveAt(denomBin.Count - 1);
                 currentBin.RemoveAt(currentBin.Count - 1);
-
                 denom = FromBinaryToDecimal(denomBin);
             }
 
@@ -337,6 +340,7 @@
                     res[j + 1] = Sum(operand1, convertor.FromStringToIntArray(operand2));
                     res[j] = calculation.Modulo10(res[j]);
                 }
+
                 while (res[j].Length > 1)
                 {
                     k++;
@@ -346,15 +350,18 @@
                     res[k - 1] = calculation.Modulo10(res[k - 1]);
                     j++;
                 }
+
                 var valueTuIncrement = i[0] > 0 ? i : new int[] { i[1] };
                 i = convertor.FromStringToIntArray(Sum(valueTuIncrement, new[] { 1 }));
             }
+
             string result = "";
             for (j = k; j >= 1; j--)
                 result += res[j];
 
             Debug.Assert(b[0] == 0 ? result.Length == 1 : result.Length >= Math.Max(a.Length, b.Length), "Invalid length of result");
             Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
+
             return result;
         }
 
@@ -387,6 +394,7 @@
 
             string final = Diff(res, one);
             Debug.Assert(final.All(char.IsDigit), "Result contains negative values");
+
             return final;
         }
 

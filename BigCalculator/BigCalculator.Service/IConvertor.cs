@@ -1,8 +1,8 @@
-﻿using BigCalculator.Core;
-using System.Xml.Linq;
-
-namespace BigCalculator.Service
+﻿namespace BigCalculator.Service
 {
+    using BigCalculator.Core;
+    using System.Xml.Linq;
+
     public interface IConvertor
     {
         Data XmlToData(XElement xml);

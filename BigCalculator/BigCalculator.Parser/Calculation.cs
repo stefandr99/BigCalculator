@@ -1,6 +1,7 @@
 ﻿namespace BigCalculator.Calculus
 {
     using System.Diagnostics;
+
     public class Calculation : ICalculation
     {
         public List<int> BinaryOr(List<int> a, List<int> b)

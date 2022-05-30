@@ -1,9 +1,9 @@
-﻿using BigCalculator.Core;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace BigCalculator.UnitTests.Validator.Generators
+﻿namespace BigCalculator.UnitTests.Validator.Generators
 {
+    using BigCalculator.Core;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class OperatorsFailGenerator : IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()

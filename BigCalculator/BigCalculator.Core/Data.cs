@@ -1,7 +1,7 @@
-﻿using System.Xml.Serialization;
-
-namespace BigCalculator.Core
+﻿namespace BigCalculator.Core
 {
+    using System.Xml.Serialization;
+
     [Serializable, XmlRoot("data")]
     public class Data
     {

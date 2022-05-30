@@ -2,8 +2,9 @@
 {
     using BigCalculator.Adapter;
     using BigCalculator.Calculus;
-using BigCalculator.Core;
+    using BigCalculator.Core;
     using BigCalculator.Service;
+    using FluentAssertions.Execution;
     using Moq;
     using System.Collections.Generic;
     using Xunit;
@@ -26,7 +27,6 @@ using BigCalculator.Core;
         public void Given_ComputeCalculus_When_ValidPostfixedExpressionAndTerms_Then_ExpectedResultIsReturned()
         {
             //Arrange
-
             string posfixedExpression = "abcd-a^*+#";
             Dictionary<string, string> terms = new Dictionary<string, string>()
             {
@@ -47,7 +47,6 @@ using BigCalculator.Core;
         public void Given_ComputeCalculus_When_InvalidPostfixedExpressionAndTermsAndReturnsMinusOne_Then_ExpectedResultIsReturned()
         {
             //Arrange
-
             string posfixedExpression = "abcd-a^*+#";
             Dictionary<string, string> terms = new Dictionary<string, string>()
             {
@@ -64,16 +63,18 @@ using BigCalculator.Core;
             var computationResult = compute.ComputeCalculus(posfixedExpression, terms);
 
             //Assert
-            Assert.Equal(expected.Data, computationResult.Data);
-            Assert.Equal(expected.ResultType, computationResult.ResultType);
-            Assert.Equal(expected.Errors, computationResult.Errors);
+            using (new AssertionScope())
+            {
+                Assert.Equal(expected.Data, computationResult.Data);
+                Assert.Equal(expected.ResultType, computationResult.ResultType);
+                Assert.Equal(expected.Errors, computationResult.Errors);
+            }
         }
 
         [Fact]
         public void Given_ComputeCalculus_When_InvalidPostfixedExpressionAndTermsAndReturnsMinusTwo_Then_ExpectedResultIsReturned()
         {
             //Arrange
-
             string posfixedExpression = "abcd/a^*+#";
             Dictionary<string, string> terms = new Dictionary<string, string>()
             {

@@ -1,8 +1,8 @@
-﻿using BigCalculator.Service;
-using Xunit;
-
-namespace BigCalculator.UnitTests.Service
+﻿namespace BigCalculator.UnitTests.Service
 {
+    using BigCalculator.Service;
+    using Xunit;
+
     public class ParserUnitTests
     {
         [Theory]

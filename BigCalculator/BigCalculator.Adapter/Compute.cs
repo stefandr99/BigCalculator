@@ -75,10 +75,12 @@
 
                         results["operation " + counter] = firstOperand + " " + x + " " + secondOperand + " = " + operationResult;
                     }
+
                     myStack.Push(operationResult);
                     counter++;
                 }
             }
+
             var finalResult = myStack.Pop().ToString();
             results["final result"] = finalResult;
             return new SuccessResult<Dictionary<string, string>>(results);
@@ -109,6 +111,7 @@
                     result = calculator.Pow(operand1, operand2);
                     break;
             }
+
             return result;
         }
     }

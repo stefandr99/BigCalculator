@@ -1,8 +1,8 @@
-﻿using BigCalculator.Core;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BigCalculator.Api.Controllers
+﻿namespace BigCalculator.Api.Controllers
 {
+    using BigCalculator.Core;
+    using Microsoft.AspNetCore.Mvc;
+
     public static class ControllerExtensions
     {
         public static ActionResult FromResult<T>(this ControllerBase controller, Result<T> result)

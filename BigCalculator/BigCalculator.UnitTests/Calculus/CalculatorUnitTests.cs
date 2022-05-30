@@ -1,11 +1,10 @@
-﻿using BigCalculator.Calculus;
-using BigCalculator.Service;
-using Moq;
-using Xunit;
-
-namespace BigCalculator.UnitTests.Calculus
+﻿namespace BigCalculator.UnitTests.Calculus
 {
+    using BigCalculator.Calculus;
+    using BigCalculator.Service;
+    using Moq;
     using System.Collections.Generic;
+    using Xunit;
 
     public class CalculatorUnitTests
     {

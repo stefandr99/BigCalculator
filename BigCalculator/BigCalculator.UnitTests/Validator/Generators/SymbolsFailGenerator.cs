@@ -1,13 +1,13 @@
-﻿using BigCalculator.Core;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BigCalculator.UnitTests.Validator.Generators
+﻿namespace BigCalculator.UnitTests.Validator.Generators
 {
+    using BigCalculator.Core;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class SymbolsFailGenerator : IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
