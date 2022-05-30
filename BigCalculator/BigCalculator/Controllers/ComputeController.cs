@@ -43,16 +43,6 @@
             return this.FromResult(validator.Validate(data));
         }
 
-        //for testing the expression is given as a query string
-        [HttpGet("Parse")]
-        public IActionResult Parse([FromQuery] string expression)
-        {
-
-            var result = parser.MakePostfix(expression);
-
-            return Ok(result);
-        }
-
         [HttpPost("ComputeXml")]
         public IActionResult PostXml([FromBody] XElement xml)
         {
