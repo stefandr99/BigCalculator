@@ -304,13 +304,13 @@
             Debug.Assert((a.Length > 1 ? a[0] > 0 : a[0] >= 0) && a[0].ToString().Length == 1, "First digit of first operand not valid");
             Debug.Assert((b.Length > 1 ? b[0] > 0 : b[0] >= 0) && b[0].ToString().Length == 1, "First digit of second operand not valid");
 
-            for (int it = 0; it < a.Length; it++)
+            for (int it = 1; it < a.Length; it++)
             {
                 Debug.Assert(a[it] >= 0, "First operand has negative values");
                 Debug.Assert(a[it].ToString().Length == 1, "First operator has multiple values on individual fields");
             }
 
-            for (int it = 0; it < b.Length; it++)
+            for (int it = 1; it < b.Length; it++)
             {
                 Debug.Assert(b[it] >= 0, "Second operand has negative values");
                 Debug.Assert(b[it].ToString().Length == 1, "Second operand has multiple values on individual fields");
@@ -352,7 +352,7 @@
             for (j = k; j >= 1; j--)
                 result += res[j];
 
-            Debug.Assert(result.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
+            Debug.Assert(b[0] == 0 ? result.Length == 1 : result.Length >= Math.Max(a.Length, b.Length), "Sum is shorter than the operands");
             Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
             return result;
         }
