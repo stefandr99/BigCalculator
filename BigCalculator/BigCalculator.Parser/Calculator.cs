@@ -18,8 +18,8 @@
 
         public string Sum(int[] a, int[] b)
         {
-            Debug.Assert((a.Length > 1 ? a[0] > 0 : a[0] >= 0) && a[0].ToString().Length == 1, "First digit of first operand not valid");
-            Debug.Assert((b.Length > 1 ? b[0] > 0 : b[0] >= 0) && b[0].ToString().Length == 1, "First digit of second operand not valid");
+            //Debug.Assert((a.Length > 1 ? a[0] > 0 : a[0] >= 0) && a[0].ToString().Length == 1, "First digit of first operand not valid");
+            //Debug.Assert((b.Length > 1 ? b[0] > 0 : b[0] >= 0) && b[0].ToString().Length == 1, "First digit of second operand not valid");
 
             for (int i = 1; i < a.Length; i++)
             {
@@ -351,15 +351,13 @@
                     j++;
                 }
 
-                var valueTuIncrement = i[0] > 0 ? i : new int[] { i[1] };
-                i = convertor.FromStringToIntArray(Sum(valueTuIncrement, new[] { 1 }));
+                i = convertor.FromStringToIntArray(Sum(i, new[] { 1 }));
             }
 
             string result = "";
             for (j = k; j >= 1; j--)
                 result += res[j];
 
-            Debug.Assert(b[0] == 0 ? result.Length == 1 : result.Length >= Math.Max(a.Length, b.Length), "Invalid length of result");
             Debug.Assert(result.All(char.IsDigit), "Result contains negative values");
 
             return result;
