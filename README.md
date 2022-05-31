@@ -1,6 +1,6 @@
 # BigCalculator
 
-Project for the Quality Assurance laboratory.
+Project for the Software Quality laboratory.
 
 Team members:  
 -Tiperciuc Stefan, Cunev Serghei, Dragoi Stefan and Condurache Andrei
