@@ -15,7 +15,7 @@
                 terms.Add(term.Name);
             }
 
-            Debug.Assert(terms.Count == data.Terms.Count(), "Data and terms list have ni equal length");
+            Debug.Assert(terms.Count == data.Terms.Count(), "Data and terms list do not have equal length");
 
             return terms;
         }
